@@ -1,0 +1,93 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const board = [
+  { name: 'Chloé Groeneveld', role: 'Praeses', photo: '/uploads/Chloe.jpg' },
+  { name: 'Frédérique Leenman', role: 'Abactis', photo: '/uploads/Frederique.jpg' },
+  { name: 'Rens Loos', role: 'Fiscus 1', photo: '/uploads/Rens.jpg' },
+  { name: 'Floris Bijma', role: 'Fiscus 2', photo: '/uploads/Floris.png' },
+  { name: 'Nick Snoeren', role: 'Fiscus 3', photo: '/uploads/Nick.jpg' },
+  { name: 'Bas Sauer', role: 'Vice-Praeses', photo: '/uploads/Bas.jpg' },
+  { name: 'Julia Buning', role: 'Assesor', photo: '/uploads/Julia.jpg' },
+  { name: 'Noor Leeuwenburgh', role: 'Procurator', photo: '/uploads/Noor.jpg' },
+];
+---
+
+<BaseLayout
+  title="Contact — Lustrum Albertus Magnus XXVI"
+  description="Neem contact op met de lustrumcommissie van Albertus Magnus voor vragen over het lustrum, sponsoring of de commissies."
+  path="/contact"
+>
+  <Fragment slot="head">
+    <style>
+      [data-board-grid] { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
+      @media (min-width: 700px) {
+        [data-board-grid] { grid-template-columns: repeat(4, 1fr); }
+      }
+    </style>
+  </Fragment>
+
+  <div id="top" style="position: relative; background: #4557A4; font-family: 'Inter', system-ui, sans-serif; min-height: 100vh;">
+    <Header />
+
+    <section style="max-width: 1240px; margin: 0 auto; padding: clamp(150px, 16vw, 200px) 6vw clamp(50px, 6vw, 80px);">
+      <div style="font-family: 'Inter Tight', sans-serif; font-weight: 600; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: #9FD8E0; margin-bottom: 14px;">Contact</div>
+      <h1 style="margin: 0 0 18px; font-family: 'Inter Tight', sans-serif; font-weight: 700; font-size: clamp(38px, 6vw, 84px); line-height: 1.02; letter-spacing: -0.02em; color: #BFF7F7;">Neem contact op</h1>
+      <p style="margin: 0; max-width: 620px; font-size: clamp(16px, 1.6vw, 19px); line-height: 1.6; color: #DCEAFF;">Vragen over het lustrum, sponsoring of een van de commissies? De lustrumcommissie helpt je graag verder.</p>
+    </section>
+
+    <section style="max-width: 1240px; margin: 0 auto; padding: 0 6vw clamp(50px, 6vw, 80px);">
+      <div style="display: flex; flex-wrap: wrap; gap: 18px; max-width: 900px;">
+        <a href="mailto:lustrumalbertus26@gmail.com" style="flex: 1 1 260px; display: flex; align-items: center; gap: 16px; padding: 22px; border-radius: 16px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); text-decoration: none;">
+          <i class="ph ph-envelope-simple" style="font-size: 26px; color: #BFF7F7;"></i>
+          <div>
+            <div style="font-family: 'Inter Tight', sans-serif; font-weight: 600; color: #FFFFFF; margin-bottom: 2px;">E-mail</div>
+            <div style="font-size: 15px; color: #DCEAFF;">lustrumalbertus26@gmail.com</div>
+          </div>
+        </a>
+        <a href="https://www.instagram.com/lustrumalbertus/" target="_blank" rel="noopener" style="flex: 1 1 260px; display: flex; align-items: center; gap: 16px; padding: 22px; border-radius: 16px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); text-decoration: none;">
+          <i class="ph ph-instagram-logo" style="font-size: 26px; color: #BFF7F7;"></i>
+          <div>
+            <div style="font-family: 'Inter Tight', sans-serif; font-weight: 600; color: #FFFFFF; margin-bottom: 2px;">Instagram</div>
+            <div style="font-size: 15px; color: #DCEAFF;">@lustrumalbertus</div>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <section style="max-width: 1240px; margin: 0 auto; padding: clamp(40px, 5vw, 70px) 6vw;">
+      <h2 style="margin: 0 0 28px; font-family: 'Inter Tight', sans-serif; font-weight: 700; font-size: clamp(28px, 3.2vw, 42px); color: #BFF7F7;">Lustrumbestuur</h2>
+      <div data-board-grid style="display: grid; gap: 22px;">
+        {board.map((p) => (
+          <div style="padding: 12px 12px 14px; border-radius: 14px; background: rgba(103,123,192,0.16); border: 1px solid rgba(103,123,192,0.4);">
+            <div style="width: 100%; aspect-ratio: 1; margin-bottom: 10px; border-radius: 8px; overflow: hidden;">
+              <img src={p.photo} alt={p.name} style="width: 100%; height: 100%; object-fit: cover; object-position: center 15%; transform: scale(1.6); transform-origin: center 18%; display: block;" />
+            </div>
+            <div style="font-family: 'Inter Tight', sans-serif; font-weight: 600; color: #FFFFFF; font-size: 16px;">{p.name}</div>
+            <div style="font-size: 14px; color: #9FD8E0;">{p.role}</div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section style="max-width: 1240px; margin: 0 auto; padding: clamp(20px, 4vw, 50px) 6vw clamp(80px, 9vw, 130px);">
+      <h2 style="margin: 0 0 10px; font-family: 'Inter Tight', sans-serif; font-weight: 700; font-size: clamp(28px, 3.2vw, 42px); color: #BFF7F7;">Commissies</h2>
+      <p style="margin: 0 0 20px; max-width: 620px; font-size: 16px; line-height: 1.6; color: #DCEAFF;">De parttime commissies die het lustrum mogelijk maken.</p>
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 18px 22px; margin-bottom: 30px; border-radius: 16px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); max-width: 720px;">
+        <p style="margin: 0; flex: 1 1 260px; font-size: 15px; line-height: 1.55; color: #DCEAFF;">Wil je je kandidaat-vrijwilligersinschrijving (KVI) inleveren voor een commissie? Dat kan via de Albertus App.</p>
+        <div style="display: flex; gap: 10px; flex: 0 0 auto;">
+          <a href="https://apps.apple.com/au/app/albertus-magnus/id1591068864" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 10px; background: #24356F; color: #FFFFFF; text-decoration: none; font-size: 14px; font-weight: 600;">
+            <i class="ph ph-apple-logo"></i> App Store
+          </a>
+          <a href="https://play.google.com/store/apps/details?id=nl.albertus.app&hl=nl&pli=1" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 10px; background: #24356F; color: #FFFFFF; text-decoration: none; font-size: 14px; font-weight: 600;">
+            <i class="ph ph-google-play-logo"></i> Google Play
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <Footer />
+  </div>
+</BaseLayout>

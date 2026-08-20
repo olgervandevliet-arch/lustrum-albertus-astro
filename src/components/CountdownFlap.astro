@@ -1,0 +1,28 @@
+---
+export interface Props {
+  id: string;
+  value: string;
+}
+
+const { id, value } = Astro.props;
+---
+
+<div
+  data-flap={id}
+  data-flap-value={value}
+  style="position: relative; width: 100%; height: 100%; border-radius: 14px; background: #FFFFFF; box-shadow: 0 1px 0 rgba(255,255,255,0.9) inset; perspective: 700px;"
+>
+  <div style="position: absolute; left: 0; right: 0; top: 0; height: 50%; overflow: hidden; border-radius: 14px 14px 0 0; background: #FFFFFF;">
+    <div data-flap-upper style="position: absolute; left: 0; right: 0; top: 0; height: 200%; display: grid; place-items: center; color: #12131A; font-weight: 500; line-height: 1;">{value}</div>
+  </div>
+  <div style="position: absolute; left: 0; right: 0; bottom: 0; height: 50%; overflow: hidden; border-radius: 0 0 14px 14px; background: #FAFBFD;">
+    <div data-flap-lower style="position: absolute; left: 0; right: 0; bottom: 0; height: 200%; display: grid; place-items: center; color: #12131A; font-weight: 500; line-height: 1;">{value}</div>
+  </div>
+  <div data-leaf-top style="position: absolute; left: 0; right: 0; top: 0; height: 50%; overflow: hidden; border-radius: 14px 14px 0 0; background: #FFFFFF; transform-origin: 50% 100%; backface-visibility: hidden; z-index: 3; visibility: hidden; will-change: transform;">
+    <div data-flap-leaf-top style="position: absolute; left: 0; right: 0; top: 0; height: 200%; display: grid; place-items: center; color: #12131A; font-weight: 500; line-height: 1;">{value}</div>
+  </div>
+  <div data-leaf-bottom style="position: absolute; left: 0; right: 0; bottom: 0; height: 50%; overflow: hidden; border-radius: 0 0 14px 14px; background: #FAFBFD; transform-origin: 50% 0%; backface-visibility: hidden; z-index: 3; transform: rotateX(90deg); visibility: hidden; will-change: transform;">
+    <div data-flap-leaf-bottom style="position: absolute; left: 0; right: 0; bottom: 0; height: 200%; display: grid; place-items: center; color: #12131A; font-weight: 500; line-height: 1;">{value}</div>
+  </div>
+  <div style="position: absolute; left: 0; right: 0; top: 50%; height: 2px; margin-top: -1px; z-index: 4; background: linear-gradient(180deg, rgba(18,28,60,0.16), rgba(255,255,255,0.85));"></div>
+</div>

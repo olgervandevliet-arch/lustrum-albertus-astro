@@ -1,0 +1,299 @@
+---
+export interface Props {
+  showAnnouncement?: boolean;
+}
+
+const { showAnnouncement = true } = Astro.props;
+
+const infoItems = [
+  { label: 'Spaarpakketten', href: '/pakketten', comingSoon: false },
+  { label: 'Kleuren', href: '/kleuren', comingSoon: false },
+  { label: 'Thema', href: '/thema', comingSoon: true },
+  { label: 'Terrein', href: '/terrein', comingSoon: true },
+  { label: 'Programma', href: '/programma', comingSoon: true },
+];
+
+const mobileItems = [
+  { label: 'Partners', href: '/partners' },
+  { label: 'FAQ', href: '/faq' },
+  { label: 'Contact', href: '/contact' },
+];
+---
+
+<style>
+  @media (max-width: 600px) {
+    [data-logo-label] { display: none; }
+  }
+
+  .header-bar-close:hover { color: #FFFFFF; }
+  .header-info-trigger:hover { background: rgba(255,255,255,0.08); }
+  .header-nav-link:hover { background: rgba(255,255,255,0.08); }
+  .header-nav-instagram:hover { opacity: 0.75; }
+  .header-menu-toggle:hover { opacity: 0.7; }
+  .header-mobile-link:hover { opacity: 0.8; }
+  .header-dropdown-link:hover { background: rgba(255,255,255,0.1); }
+</style>
+
+<div data-header-root style="font-family: 'Inter', system-ui, sans-serif;">
+  {showAnnouncement && (
+    <div data-bar style="position: relative; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px 8px; background: #3B4C99; color: #FFFFFF; font-size: clamp(12px, 3vw, 14px); font-weight: 500; letter-spacing: 0.005em; padding: 12px clamp(40px, 10vw, 56px); text-align: center; border-bottom: 1px solid #677BC0">
+      <span>Volg ons op Instagram voor de laatste updates.</span>
+      <a href="https://www.instagram.com/lustrumalbertus/" target="_blank" rel="noopener" style="color: #FFFFFF; text-decoration: underline; text-underline-offset: 3px; font-weight: 500;">Naar instagram &gt;</a>
+      <button type="button" data-bar-close class="header-bar-close" aria-label="Sluiten" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); width: 26px; height: 26px; display: grid; place-items: center; background: transparent; border: 0; cursor: pointer; color: #DCEAFF; font-size: 18px; line-height: 1; padding: 0;">
+        <i class="ph ph-x"></i>
+      </button>
+    </div>
+  )}
+  <div data-header-wrap style="position: fixed; top: 0; left: 0; width: 100%; z-index: 80; display: flex; justify-content: center; padding: 18px 4vw 0; padding-top: 24px; box-sizing: border-box; transform: translateY(0); transition: transform 0.4s ease, padding-top 0.3s ease; pointer-events: none;">
+    <div data-nav style="display: flex; flex-direction: column; height: 64px; border-radius: 999px; background: linear-gradient(180deg, rgba(20,30,70,0.42), rgba(20,30,70,0.28)); border: 1px solid rgba(255,255,255,0.16); backdrop-filter: blur(20px) saturate(140%); -webkit-backdrop-filter: blur(20px) saturate(140%); box-shadow: inset 0 1px 0 rgba(255,255,255,0.18); width: min(400px, 92vw); overflow: hidden; will-change: height, width; pointer-events: auto;">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: clamp(10px, 2vw, 24px); height: 64px; flex: 0 0 64px; padding: 0 clamp(16px, 4vw, 26px); padding-left: clamp(24px, 4vw, 32px); padding-right: clamp(24px, 4vw, 32px)">
+        <a href="/" data-logo-link data-pt-link="1" style="display: flex; align-items: center; gap: 9px; color: #FFFFFF; text-decoration: none; flex: 0 0 auto;">
+          <span data-logo-label style="display: block; font-family: 'Inter Tight', sans-serif; font-size: 13px; font-weight: 600; line-height: 1.12; letter-spacing: 0.01em; text-align: right; opacity: 0.95; white-space: nowrap;">Lustrum<br>Albertus</span>
+          <span style="font-family: 'Inter Tight', sans-serif; font-size: 28px; font-weight: 800; letter-spacing: -0.01em; line-height: 1;">XXVI</span>
+        </a>
+        <nav data-nav-links style="display: flex; align-items: center; gap: clamp(8px, 1.6vw, 22px); flex: 0 0 0px; min-width: 0; justify-content: center; opacity: 0; white-space: nowrap; overflow: visible; pointer-events: none;">
+          <div data-info-trigger class="header-info-trigger" style="position: relative; border-radius: 8px; padding: 7px 12px; margin: -7px -12px; transition: background 0.15s ease;">
+            <span style="display: flex; align-items: center; gap: 4px; color: #FFFFFF; font-size: clamp(12px, 2.2vw, 14px); font-weight: 500; cursor: default;">Informatie <i data-info-caret class="ph ph-caret-down" style="font-size: 12px; transition: transform 0.2s ease;"></i></span>
+          </div>
+          <a href="/partners" class="header-nav-link" style="color: #FFFFFF; text-decoration: none; font-size: clamp(12px, 2.2vw, 14px); font-weight: 500; padding: 7px 12px; margin: -7px -12px; border-radius: 8px; transition: background 0.15s ease;">Partners</a>
+          <a href="/faq" class="header-nav-link" style="color: #FFFFFF; text-decoration: none; font-size: clamp(12px, 2.2vw, 14px); font-weight: 500; padding: 7px 12px; margin: -7px -12px; border-radius: 8px; transition: background 0.15s ease;">FAQ</a>
+          <a href="/contact" class="header-nav-link" style="color: #FFFFFF; text-decoration: none; font-size: clamp(12px, 2.2vw, 14px); font-weight: 500; padding: 7px 12px; margin: -7px -12px; border-radius: 8px; transition: background 0.15s ease;">Contact</a>
+          <a href="https://www.instagram.com/lustrumalbertus/" target="_blank" rel="noopener" aria-label="Instagram" class="header-nav-instagram" style="display: grid; place-items: center; width: 26px; height: 26px; color: #FFFFFF; flex: 0 0 auto; font-size: 20px; text-decoration: none;">
+            <i class="ph ph-instagram-logo"></i>
+          </a>
+        </nav>
+        <button type="button" aria-label="Menu" data-menu-toggle class="header-menu-toggle" style="position: relative; display: grid; place-items: center; width: 32px; height: 44px; padding: 0; background: transparent; border: 0; cursor: pointer; flex: 0 0 auto; color: #FFFFFF; font-size: 26px;">
+          <i data-icon-menu class="ph ph-list" style="position: absolute; transition: transform 0.4s cubic-bezier(0.65, 0, 0.35, 1); transform: rotate(0deg) scale(1);"></i>
+          <i data-icon-close class="ph ph-x" style="position: absolute; transition: transform 0.4s cubic-bezier(0.65, 0, 0.35, 1); transform: rotate(-180deg) scale(0);"></i>
+        </button>
+      </div>
+      <div data-list style="display: flex; flex-direction: column; border-top: 1px solid rgba(255,255,255,0.22); opacity: 0; transition: opacity 0.35s ease;">
+        <button type="button" data-mobile-info-toggle style="display: flex; align-items: center; justify-content: space-between; padding: 18px clamp(28px, 7vw, 40px) 18px clamp(24px, 6vw, 34px); color: #FFFFFF; background: transparent; border: 0; width: 100%; text-align: left; cursor: pointer; font-family: 'Inter Tight', sans-serif; font-size: clamp(16px, 4.2vw, 19px); font-weight: 500; border-bottom: 1px solid rgba(255,255,255,0.14);">
+          <span>Informatie</span>
+          <i data-mobile-info-caret class="ph ph-caret-down" style="transition: transform 0.25s ease;"></i>
+        </button>
+        <div data-mobile-info-list style="display: none;">
+          {infoItems.map((item) => (
+            <a href={item.href} class="header-mobile-link" style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 14px clamp(28px, 7vw, 40px) 14px clamp(40px, 10vw, 52px); color: #DCEAFF; text-decoration: none; font-family: 'Inter Tight', sans-serif; font-size: clamp(14px, 3.8vw, 17px); font-weight: 500; border-bottom: 1px solid rgba(255,255,255,0.1);">
+              <span style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                <span>{item.label}</span>
+                {item.comingSoon && (
+                  <span style="flex: 0 0 auto; font-size: 10px; font-weight: 600; letter-spacing: 0.02em; color: #BFF7F7; background: rgba(191,247,247,0.12); padding: 3px 7px; border-radius: 999px; white-space: nowrap;">Coming soon</span>
+                )}
+              </span>
+              <i class="ph ph-arrow-right" aria-hidden="true" style="flex: 0 0 auto;"></i>
+            </a>
+          ))}
+        </div>
+        {mobileItems.map((item) => (
+          <a href={item.href} class="header-mobile-link" style="display: flex; align-items: center; justify-content: space-between; padding: 18px clamp(28px, 7vw, 40px) 18px clamp(24px, 6vw, 34px); color: #FFFFFF; text-decoration: none; font-family: 'Inter Tight', sans-serif; font-size: clamp(16px, 4.2vw, 19px); font-weight: 500; border-bottom: 1px solid rgba(255,255,255,0.14);">
+            <span>{item.label}</span>
+            <i class="ph ph-arrow-right" aria-hidden="true"></i>
+          </a>
+        ))}
+        <a href="https://www.instagram.com/lustrumalbertus/" target="_blank" rel="noopener" class="header-mobile-link" style="display: flex; align-items: center; gap: 10px; padding: 18px clamp(28px, 7vw, 40px) 22px clamp(24px, 6vw, 34px); color: #FFFFFF; text-decoration: none; font-family: 'Inter Tight', sans-serif; font-size: clamp(16px, 4.2vw, 19px); font-weight: 500;">
+          <i class="ph-bold ph-instagram-logo"></i>
+          <span>Volg ons op Instagram</span>
+        </a>
+      </div>
+    </div>
+    <div data-info-dropdown style="position: fixed; left: 0px; top: 0px; transform: translateX(-50%); padding-top: 12px; opacity: 0; pointer-events: none; transition: opacity 0.2s ease; z-index: 90;">
+      <div data-info-dropdown-inner style="min-width: 190px; border-radius: 14px; background: linear-gradient(180deg, rgba(20,30,70,0.94), rgba(20,30,70,0.9)); border: 1px solid rgba(255,255,255,0.16); backdrop-filter: blur(20px); padding: 8px; display: flex; flex-direction: column; transform: translateY(-6px); transition: transform 0.2s ease;">
+        {infoItems.map((item) => (
+          <a href={item.href} class="header-dropdown-link" style="display: flex; align-items: center; gap: 8px; color: #FFFFFF; text-decoration: none; font-size: 14px; font-weight: 500; padding: 9px 12px; border-radius: 8px;">
+            <span>{item.label}</span>
+            {item.comingSoon && (
+              <span style="flex: 0 0 auto; font-size: 10px; font-weight: 600; letter-spacing: 0.02em; color: #BFF7F7; background: rgba(191,247,247,0.12); padding: 3px 7px; border-radius: 999px; white-space: nowrap;">Coming soon</span>
+            )}
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function initHeader(root: HTMLElement) {
+    const barEl = root.querySelector<HTMLElement>('[data-bar]');
+    const barCloseBtn = root.querySelector<HTMLElement>('[data-bar-close]');
+    const headerWrap = root.querySelector<HTMLElement>('[data-header-wrap]');
+    const navEl = root.querySelector<HTMLElement>('[data-nav]');
+    const navLinks = root.querySelector<HTMLElement>('[data-nav-links]');
+    const listEl = root.querySelector<HTMLElement>('[data-list]');
+    const menuToggle = root.querySelector<HTMLElement>('[data-menu-toggle]');
+    const iconMenu = root.querySelector<HTMLElement>('[data-icon-menu]');
+    const iconClose = root.querySelector<HTMLElement>('[data-icon-close]');
+    const infoTrigger = root.querySelector<HTMLElement>('[data-info-trigger]');
+    const infoCaret = root.querySelector<HTMLElement>('[data-info-caret]');
+    const infoDropdown = root.querySelector<HTMLElement>('[data-info-dropdown]');
+    const infoDropdownInner = root.querySelector<HTMLElement>('[data-info-dropdown-inner]');
+    const mobileInfoToggle = root.querySelector<HTMLElement>('[data-mobile-info-toggle]');
+    const mobileInfoCaret = root.querySelector<HTMLElement>('[data-mobile-info-caret]');
+    const mobileInfoList = root.querySelector<HTMLElement>('[data-mobile-info-list]');
+    const logoLink = root.querySelector<HTMLAnchorElement>('[data-logo-link]');
+
+    if (!headerWrap || !navEl || !listEl || !menuToggle) return;
+
+    const isMobile = () => window.matchMedia('(hover: none), (max-width: 900px)').matches;
+
+    const state = {
+      closed: false,
+      open: false,
+      hidden: false,
+      barHeight: 0,
+      compact: false,
+      infoOpen: false,
+      mobileInfoOpen: false,
+    };
+
+    let lastScrollY = window.scrollY;
+    let infoCloseTimer: ReturnType<typeof setTimeout> | undefined;
+
+    const measureBar = () => {
+      const h = barEl && !state.closed ? barEl.offsetHeight : 0;
+      if (h !== state.barHeight) {
+        state.barHeight = h;
+        render();
+      }
+    };
+
+    const render = () => {
+      headerWrap!.style.paddingTop = (state.compact ? 24 : state.barHeight + 24) + 'px';
+      headerWrap!.style.transform = state.hidden ? 'translateY(-130%)' : 'translateY(0)';
+
+      const mobile = isMobile();
+      const desktopOpen = state.open && !mobile;
+      const mobileOpenVal = state.open && mobile;
+
+      navLinks!.style.opacity = desktopOpen ? '1' : '0';
+      navLinks!.style.flex = desktopOpen ? '1 1 auto' : '0 0 0px';
+      navLinks!.style.pointerEvents = desktopOpen ? 'auto' : 'none';
+
+      listEl!.style.opacity = mobileOpenVal ? '1' : '0';
+      navEl!.style.borderRadius = mobile ? '32px' : '999px';
+
+      iconMenu!.style.transform = state.open ? 'rotate(180deg) scale(0)' : 'rotate(0deg) scale(1)';
+      iconClose!.style.transform = state.open ? 'rotate(0deg) scale(1)' : 'rotate(-180deg) scale(0)';
+
+      if (infoCaret) infoCaret.style.transform = state.infoOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+      if (infoDropdown) {
+        infoDropdown.style.opacity = state.infoOpen ? '1' : '0';
+        infoDropdown.style.pointerEvents = state.infoOpen ? 'auto' : 'none';
+      }
+      if (infoDropdownInner) infoDropdownInner.style.transform = state.infoOpen ? 'translateY(0)' : 'translateY(-6px)';
+      if (mobileInfoCaret) mobileInfoCaret.style.transform = state.mobileInfoOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+      if (mobileInfoList) mobileInfoList.style.display = state.mobileInfoOpen ? 'flex' : 'none';
+      if (mobileInfoList) mobileInfoList.style.flexDirection = 'column';
+    };
+
+    const animate = () => {
+      const gsap = (window as any).gsap;
+      if (!gsap) return;
+      if (isMobile()) {
+        gsap.killTweensOf(navEl);
+        const listH = listEl!.scrollHeight;
+        gsap.set(navEl, { borderRadius: 32 });
+        if (state.open) {
+          gsap.to(navEl, { height: 64 + listH, width: Math.min(400, window.innerWidth * 0.82), duration: 0.85, ease: 'elastic.out(1, 0.55)' });
+        } else {
+          gsap.to(navEl, { height: 64, width: Math.min(240, window.innerWidth * 0.82), duration: 0.7, ease: 'elastic.out(1, 0.6)' });
+        }
+        return;
+      }
+      if (state.open) {
+        const full = Math.min(window.innerWidth * 0.7, 760);
+        gsap.to(navEl, { width: full, duration: 0.75, ease: 'elastic.out(1, 0.65)' });
+      } else {
+        const closed = Math.min(400, window.innerWidth * 0.92);
+        gsap.to(navEl, { width: closed, duration: 0.6, ease: 'elastic.out(1, 0.75)' });
+      }
+    };
+
+    const onScroll = () => {
+      const y = window.scrollY;
+      if (state.open) { lastScrollY = y; return; }
+      const barGone = y > state.barHeight + 40;
+      const goingDown = y > lastScrollY + 4;
+      const goingUp = y < lastScrollY - 4;
+      if (goingDown && y > 120 && !state.hidden) state.hidden = true;
+      else if (goingUp && state.hidden) { state.hidden = false; state.compact = barGone; }
+      else if (y <= 120 && state.hidden) { state.hidden = false; state.compact = barGone; }
+      else if (!state.hidden) state.compact = barGone;
+      lastScrollY = y;
+      render();
+    };
+
+    const setInfoOpen = (open: boolean) => {
+      if (isMobile()) return;
+      clearTimeout(infoCloseTimer);
+      if (open && infoTrigger && infoDropdown) {
+        const r = infoTrigger.getBoundingClientRect();
+        infoDropdown.style.left = (r.left + r.width / 2) + 'px';
+        infoDropdown.style.top = r.bottom + 'px';
+      }
+      state.infoOpen = open;
+      render();
+    };
+
+    barCloseBtn?.addEventListener('click', () => {
+      state.closed = true;
+      if (barEl) barEl.style.display = 'none';
+      measureBar();
+    });
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', measureBar);
+    measureBar();
+
+    const initialWidth = Math.min(isMobile() ? 240 : 400, window.innerWidth * (isMobile() ? 0.82 : 0.92));
+    navEl.style.width = initialWidth + 'px';
+
+    menuToggle.addEventListener('click', () => {
+      state.open = !state.open;
+      render();
+      animate();
+    });
+
+    navEl.addEventListener('mouseenter', () => {
+      if (isMobile() || state.open) return;
+      state.open = true;
+      render();
+      animate();
+    });
+    navEl.addEventListener('mouseleave', () => {
+      if (isMobile() || !state.open) return;
+      state.open = false;
+      render();
+      animate();
+    });
+
+    infoTrigger?.addEventListener('mouseenter', () => setInfoOpen(true));
+    infoTrigger?.addEventListener('mouseleave', () => { clearTimeout(infoCloseTimer); setInfoOpen(false); });
+
+    infoDropdown?.addEventListener('mouseenter', () => {
+      setInfoOpen(true);
+      if (!isMobile()) { state.open = true; render(); animate(); }
+    });
+    infoDropdown?.addEventListener('mouseleave', () => {
+      setInfoOpen(false);
+      if (!isMobile() && state.open) { state.open = false; render(); animate(); }
+    });
+
+    mobileInfoToggle?.addEventListener('click', () => {
+      state.mobileInfoOpen = !state.mobileInfoOpen;
+      render();
+      animate();
+    });
+
+    logoLink?.addEventListener('click', (e) => {
+      e.preventDefault();
+      const pt = (window as any).__pageTransition;
+      if (pt) pt.go('/');
+      else window.location.href = '/';
+    });
+
+    render();
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-header-root]').forEach(initHeader);
+</script>

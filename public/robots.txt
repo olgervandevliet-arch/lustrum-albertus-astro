@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://lustrum-albertus-astro.vercel.app/sitemap-index.xml

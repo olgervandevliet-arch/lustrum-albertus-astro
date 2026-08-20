@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const partners = [
+  { name: 'Heineken', desc: 'Heineken verzorgt als officiële biersponsor de tap tijdens de lustrumweek.', src: '/uploads/2017-06-28_10-29-12.png' },
+  { name: 'Stelz', desc: 'Stelz verzorgt als partner de sterkedrank tijdens de lustrumweek.', src: '/uploads/Stelz_Hard_drinks_logo_Main_9866ecfd-40ab-4e05-bf3f-3a5d23247571_1280x.png.webp' },
+  { name: 'Webwavers', desc: 'Webwavers heeft als technisch partner deze website gebouwd.', src: '/uploads/Webwavers- blauw1.svg' },
+];
+---
+
+<BaseLayout
+  title="Partners &amp; sponsoren — Lustrum Albertus Magnus XXVI"
+  description="Maak kennis met de partners en sponsoren van Lustrum Albertus Magnus XXVI, waaronder Heineken, Stelz en Webwavers."
+  path="/partners"
+>
+  <div id="top" style="position: relative; background: #4557A4; font-family: 'Inter', system-ui, sans-serif; min-height: 100vh;">
+    <Header />
+
+    <section style="max-width: 1240px; margin: 0 auto; padding: clamp(150px, 16vw, 200px) 6vw clamp(50px, 6vw, 80px);">
+      <div style="font-family: 'Inter Tight', sans-serif; font-weight: 600; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: #9FD8E0; margin-bottom: 14px;">Onze partners</div>
+      <h1 style="margin: 0 0 18px; font-family: 'Inter Tight', sans-serif; font-weight: 700; font-size: clamp(38px, 6vw, 84px); line-height: 1.02; letter-spacing: -0.02em; color: #BFF7F7;">Partners &amp; sponsoren</h1>
+      <p style="margin: 0; max-width: 620px; font-size: clamp(16px, 1.6vw, 19px); line-height: 1.6; color: #DCEAFF;">Dankzij deze partners kunnen we van Lustrum Albertus Magnus XXVI een onvergetelijke week maken.</p>
+    </section>
+
+    <section style="max-width: 1240px; margin: 0 auto; padding: 0 6vw clamp(80px, 9vw, 130px);">
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px;">
+        {partners.map((p) => (
+          <div style="border-radius: 16px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); overflow: hidden;">
+            <div style="background: #FFFFFF; padding: 28px; display: flex; align-items: center; justify-content: center; height: 120px;">
+              <img src={p.src} alt={p.name} style="width: 100%; height: 100%; object-fit: contain;" />
+            </div>
+            <div style="padding: 18px 20px 22px;">
+              <div style="font-family: 'Inter Tight', sans-serif; font-weight: 600; font-size: 18px; color: #FFFFFF; margin-bottom: 6px;">{p.name}</div>
+              <div style="font-size: 14px; line-height: 1.55; color: #DCEAFF;">{p.desc}</div>
+            </div>
+          </div>
+        ))}
+        <a href="/contact" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; text-align: center; border-radius: 16px; background: rgba(255,255,255,0.04); border: 1px dashed rgba(255,255,255,0.3); padding: 40px 24px; text-decoration: none; min-height: 214px;">
+          <i class="ph ph-handshake" style="font-size: 30px; color: #BFF7F7;"></i>
+          <div style="font-family: 'Inter Tight', sans-serif; font-weight: 600; font-size: 18px; color: #FFFFFF;">Sponsor worden?</div>
+          <div style="font-size: 14px; color: #DCEAFF;">Neem contact op</div>
+        </a>
+      </div>
+    </section>
+
+    <Footer />
+  </div>
+</BaseLayout>

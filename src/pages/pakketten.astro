@@ -1,0 +1,115 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const packages = [
+  {
+    name: 'Bierbedelaar',
+    price: '850',
+    m11: '77,27',
+    m10: '85,00',
+    features: ['Passe-partout met 15% korting', '150 munten', '€0,05 korting per munt', 'Lustrumgadgetpakket t.w.v. ca. €40'],
+  },
+  {
+    name: 'Muntenraper',
+    price: '1.075',
+    m11: '97,73',
+    m10: '107,50',
+    features: ['Passe-partout met 15% korting', '250 munten', '€0,15 korting per munt', 'Lustrumgadgetpakket t.w.v. ca. €55'],
+  },
+  {
+    name: 'Prinspils',
+    price: '1.250',
+    m11: '113,64',
+    m10: '125,00',
+    features: ['Passe-partout met 15% korting', '400 munten', '€0,25 korting per munt', 'Lustrumgadgetpakket t.w.v. ca. €65'],
+  },
+  {
+    name: 'Ouderejaarspakket',
+    price: '450',
+    m11: '40,91',
+    m10: '45,00',
+    features: ['Toegang tot Openingsfeest, Clubdag en Seniorendag + 3 lustrumdagen naar keuze (excl. Chiquedag en Geheimedag)', '100 munten', 'Lustrumgadgetpakket t.w.v. ca. €25'],
+  },
+];
+---
+
+<BaseLayout
+  title="Spaarpakketten — Lustrum Albertus Magnus XXVI"
+  description="Bekijk de spaarpakketten voor Lustrum Albertus Magnus XXVI: Bierbedelaar, Muntenraper, Prinspils en het ouderejaarspakket, inclusief prijzen en maandbedragen."
+  path="/pakketten"
+>
+  <Fragment slot="head">
+    <style>
+      [data-package-grid] { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+      @media (min-width: 901px) {
+        [data-package-grid] { grid-template-columns: repeat(4, 1fr); }
+      }
+    </style>
+  </Fragment>
+
+  <div id="top" style="position: relative; background: #4557A4; font-family: 'Inter', system-ui, sans-serif; min-height: 100vh;">
+    <Header />
+
+    <section style="max-width: 1240px; margin: 0 auto; padding: clamp(150px, 16vw, 200px) 6vw clamp(30px, 4vw, 50px);">
+      <div style="font-family: 'Inter Tight', sans-serif; font-weight: 600; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: #9FD8E0; margin-bottom: 14px;">Sparen voor XXVI</div>
+      <h1 style="margin: 0 0 18px; font-family: 'Inter Tight', sans-serif; font-weight: 700; font-size: clamp(38px, 6vw, 84px); line-height: 1.02; letter-spacing: -0.02em; color: #BFF7F7;">Spaarpakketten</h1>
+      <p style="margin: 0; max-width: 700px; font-size: clamp(16px, 1.6vw, 19px); line-height: 1.65; color: #DCEAFF;">Deze KEI-week zijn de spaarpakketten bekendgemaakt en kan het sparen voor het 26e Lustrum officieel beginnen! Kies het pakket dat bij je past en geef je keuze door via de link onderaan deze pagina.</p>
+    </section>
+
+    <section style="max-width: 1240px; margin: 0 auto; padding: clamp(20px, 3vw, 40px) 6vw clamp(30px, 4vw, 50px);">
+      <div data-package-grid style="display: grid; gap: 20px; max-width: 1160px;">
+        {packages.map((p) => (
+          <div style="border-radius: 20px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); padding: 28px 26px; display: flex; flex-direction: column;">
+            <div style="font-family: 'Inter Tight', sans-serif; font-weight: 700; font-size: 24px; color: #BFF7F7; margin-bottom: 4px;">{p.name}</div>
+            <div style="font-family: 'Inter Tight', sans-serif; font-weight: 800; font-size: clamp(28px, 2.6vw, 34px); color: #FFFFFF; margin-bottom: 18px;">€{p.price}</div>
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; flex: 1;">
+              {p.features.map((f) => (
+                <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 15px; line-height: 1.5; color: #DCEAFF;">
+                  <i class="ph ph-check-circle" style="flex: 0 0 auto; color: #9FD8E0; font-size: 18px; margin-top: 2px;"></i>
+                  <span>{f}</span>
+                </div>
+              ))}
+            </div>
+            <div style="border-top: 1px solid rgba(255,255,255,0.16); padding-top: 16px; display: flex; flex-direction: column; gap: 4px;">
+              <div style="font-size: 14px; color: #9FD8E0;">11 maanden: <span style="color: #FFFFFF; font-weight: 600;">€{p.m11} p/m</span></div>
+              <div style="font-size: 14px; color: #9FD8E0;">10 maanden: <span style="color: #FFFFFF; font-weight: 600;">€{p.m10} p/m</span></div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section style="max-width: 1240px; margin: 0 auto; padding: 0 6vw clamp(20px, 3vw, 30px);">
+      <div style="max-width: 760px; display: flex; flex-direction: column; gap: 14px; font-size: 16px; line-height: 1.7; color: #DCEAFF;">
+        <p style="margin: 0;">Om de kosten voor het Lustrum te spreiden, hebben wij vijf verschillende spaarpakketten samengesteld, zodat er voor ieder wat passends tussen zit. De drie reguliere pakketten zijn: Bierbedelaar, Muntenraper en Prinspils. Daarnaast is er voor de ouderejaars een ouderejaarspakket samengesteld en voor senioren een seniorenpakket.</p>
+        <p style="margin: 0;">Ieder regulier spaarpakket bestaat uit een passe-partout, een bepaald aantal munten en lustrumgadgets. Een passe-partout geeft toegang tot alle dagen van het Lustrum en de overige lustrumactiviteiten. Op de passe-partout van de reguliere pakketten ontvang je 15% korting ten opzichte van de losse ticketprijs. Daarnaast ontvang je, afhankelijk van het gekozen pakket, korting op de munten die je tijdens het Lustrum kunt besteden — hoe groter het pakket, hoe hoger de korting per munt. Munten die tijdens het Lustrum zelf worden aangeschaft, worden tegen het volledige tarief verkocht.</p>
+      </div>
+    </section>
+
+    <section style="max-width: 1240px; margin: 0 auto; padding: 0 6vw clamp(20px, 3vw, 30px);">
+      <div style="max-width: 760px; display: flex; flex-direction: column; gap: 14px; font-size: 16px; line-height: 1.7; color: #DCEAFF;">
+        <p style="margin: 0;">Je kunt ervoor kiezen om het bedrag van jouw spaarpakket in 11 of 10 maandelijkse termijnen te betalen. Kies je voor 11 termijnen, dan vindt de eerste incasso plaats in augustus 2026 en loopt het sparen tot en met juni 2027. Kies je voor 10 termijnen, dan start de eerste incasso in september 2026 en loopt het sparen ook tot en met juni 2027. Daarnaast is het mogelijk om het volledige bedrag in één keer te betalen — dit bedrag wordt bij de eerste incasso afgeschreven.</p>
+        <div style="display: flex; gap: 12px; padding: 18px 20px; border-radius: 14px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14);">
+          <i class="ph ph-info" style="flex: 0 0 auto; font-size: 20px; color: #9FD8E0; margin-top: 2px;"></i>
+          <p style="margin: 0; font-size: 15px; line-height: 1.6;">Let op: ben je net senior geworden maar wil je toch nog een ouderejaarspakket afsluiten? Wacht dan nog even met het afsluiten van je pakket — zonder debiteurennummer is dit namelijk nog niet mogelijk. Zodra dit wel kan, laten we het weten!</p>
+        </div>
+      </div>
+    </section>
+
+    <section style="max-width: 1240px; margin: 0 auto; padding: clamp(20px, 3vw, 40px) 6vw clamp(80px, 9vw, 130px);">
+      <div style="max-width: 760px; border-radius: 20px; background: linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.04)); border: 1px solid rgba(255,255,255,0.16); padding: 30px 32px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px;">
+        <div>
+          <div style="font-family: 'Inter Tight', sans-serif; font-weight: 700; font-size: clamp(20px, 2vw, 24px); color: #FFFFFF; margin-bottom: 6px;">Geef je keuze door</div>
+          <div style="font-size: 15px; line-height: 1.6; color: #DCEAFF;">Je hebt één week de tijd. De inschrijving sluit op <strong>21 augustus om 17:00</strong>.</div>
+        </div>
+        <a href="https://tally.so/r/eqOlPx" target="_blank" rel="noopener" style="flex: 0 0 auto; display: inline-flex; align-items: center; gap: 8px; padding: 14px 26px; border-radius: 999px; background: #BFF7F7; color: #24356F; text-decoration: none; font-family: 'Inter Tight', sans-serif; font-weight: 700; font-size: 16px;">
+          Kies je spaarpakket <i class="ph ph-arrow-right"></i>
+        </a>
+      </div>
+    </section>
+
+    <Footer />
+  </div>
+</BaseLayout>

@@ -1,0 +1,81 @@
+---
+import '../styles/global.css';
+
+export interface Props {
+  title: string;
+  description: string;
+  path: string;
+  ogImage?: string;
+}
+
+const {
+  title,
+  description,
+  path,
+  ogImage = '/uploads/Header.jpg',
+} = Astro.props;
+
+const canonicalURL = new URL(path, Astro.site);
+const ogImageURL = new URL(ogImage, Astro.site);
+
+const eventJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Event',
+  name: 'Lustrum Albertus Magnus XXVI',
+  description:
+    'Het 26e lustrum van studentenvereniging Albertus Magnus: een week vol feesten, activiteiten en tradities.',
+  startDate: '2027-08-18T20:00:00+02:00',
+  eventStatus: 'https://schema.org/EventScheduled',
+  eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+  organizer: {
+    '@type': 'Organization',
+    name: 'Studentenvereniging Albertus Magnus',
+    url: 'https://www.instagram.com/lustrumalbertus/',
+  },
+  image: [ogImageURL.toString()],
+  url: new URL('/', Astro.site).toString(),
+};
+---
+
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonicalURL} />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Lustrum Albertus Magnus XXVI" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonicalURL} />
+  <meta property="og:image" content={ogImageURL} />
+  <meta property="og:locale" content="nl_NL" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImageURL} />
+
+  <link rel="icon" type="image/png" href="/uploads/AM-lustrum-fav.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Inter+Tight:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" is:inline></script>
+  <script src="https://unpkg.com/@phosphor-icons/web" is:inline></script>
+  <script src="/scripts/page-transition.js" is:inline></script>
+
+  <script type="application/ld+json" set:html={JSON.stringify(eventJsonLd)} />
+
+  <slot name="head" />
+</head>
+<body>
+  <slot />
+</body>
+</html>

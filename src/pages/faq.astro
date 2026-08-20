@@ -1,0 +1,61 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const faqs = [
+  { q: 'Wanneer is de lustrumweek?', a: 'De lustrumweek XXVI vindt plaats in augustus 2027. De exacte data volgen zodra het definitieve programma bekend is — houd de countdown op de homepage in de gaten.' },
+  { q: 'Wie mag er mee naar het lustrum?', a: 'Alle leden van Albertus Magnus zijn welkom. Voor sommige onderdelen, zoals de wintersportreis, geldt een beperkt aantal plaatsen.' },
+  { q: 'Wat kost deelname?', a: 'De prijzen per onderdeel worden per activiteit gecommuniceerd via de vereniging en onze Instagram. Voor de lustrumweek zelf komt er een apart ticketsysteem.' },
+  { q: 'Hoe kom ik aan een ticket?', a: 'Tickets voor losse activiteiten en de lustrumweek worden via de vereniging verkocht. Zodra verkoop opent, laten we dit via alle kanalen weten.' },
+  { q: 'Is er een dresscode tijdens het gala?', a: 'Voor het voorjaarsgala geldt een chique dresscode. Meer details volgen dichter bij de datum.' },
+  { q: 'Kan ik me aanmelden als vrijwilliger of commissielid?', a: 'Zeker — neem contact op met de lustrumcommissie via de contactpagina. We zijn regelmatig op zoek naar enthousiaste leden voor de verschillende commissies.' },
+  { q: 'Waar vindt de lustrumweek plaats?', a: 'De locatie wordt binnenkort bekendgemaakt op de Terrein-pagina, inclusief plattegrond en bereikbaarheid.' },
+  { q: 'Wie kan ik benaderen met sponsorvragen?', a: 'Voor samenwerkingen en sponsoring kun je terecht bij de sponsorcommissie — de contactgegevens vind je op de contactpagina.' },
+];
+---
+
+<BaseLayout
+  title="Veelgestelde vragen — Lustrum Albertus Magnus XXVI"
+  description="Antwoorden op veelgestelde vragen over Lustrum Albertus Magnus XXVI: data, deelname, tickets, dresscode en meer."
+  path="/faq"
+>
+  <div id="top" style="position: relative; background: #4557A4; font-family: 'Inter', system-ui, sans-serif; min-height: 100vh;">
+    <Header />
+
+    <section style="max-width: 1240px; margin: 0 auto; padding: clamp(150px, 16vw, 200px) 6vw clamp(50px, 6vw, 80px);">
+      <div style="font-family: 'Inter Tight', sans-serif; font-weight: 600; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: #9FD8E0; margin-bottom: 14px;">Vragen &amp; antwoorden</div>
+      <h1 style="margin: 0 0 18px; font-family: 'Inter Tight', sans-serif; font-weight: 700; font-size: clamp(38px, 6vw, 84px); line-height: 1.02; letter-spacing: -0.02em; color: #BFF7F7;">Veelgestelde vragen</h1>
+      <p style="margin: 0; max-width: 620px; font-size: clamp(16px, 1.6vw, 19px); line-height: 1.6; color: #DCEAFF;">Staat je vraag er niet bij? Neem contact op met de lustrumcommissie.</p>
+    </section>
+
+    <section style="max-width: 1240px; margin: 0 auto; padding: 0 6vw clamp(80px, 9vw, 130px);">
+      <div style="max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px;">
+        {faqs.map((f, i) => (
+          <div data-faq-item style="border-radius: 16px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); overflow: hidden;">
+            <button type="button" data-faq-toggle style="width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 22px; background: transparent; border: 0; cursor: pointer; text-align: left; color: #BFF7F7; font-family: 'Inter Tight', sans-serif; font-weight: 600; font-size: clamp(16px, 1.6vw, 19px);">
+              <span>{f.q}</span>
+              <i data-faq-icon class="ph ph-plus" style={`flex: 0 0 auto; font-size: 20px; transition: transform 0.25s ease; transform: rotate(${i === 0 ? '45deg' : '0deg'});`}></i>
+            </button>
+            <div data-faq-answer style={`padding: 0 22px 22px; font-size: 16px; line-height: 1.6; color: #DCEAFF; ${i === 0 ? '' : 'display: none;'}`}>{f.a}</div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <Footer />
+  </div>
+
+  <script>
+    document.querySelectorAll<HTMLElement>('[data-faq-item]').forEach((item) => {
+      const toggle = item.querySelector<HTMLElement>('[data-faq-toggle]');
+      const icon = item.querySelector<HTMLElement>('[data-faq-icon]');
+      const answer = item.querySelector<HTMLElement>('[data-faq-answer]');
+      toggle?.addEventListener('click', () => {
+        const isOpen = answer?.style.display !== 'none';
+        if (answer) answer.style.display = isOpen ? 'none' : 'block';
+        if (icon) icon.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(45deg)';
+      });
+    });
+  </script>
+</BaseLayout>

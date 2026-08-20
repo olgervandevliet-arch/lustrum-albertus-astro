@@ -1,0 +1,19 @@
+# build output
+dist/
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+
+# environment
+.env
+.env.production
+
+.vercel
+.DS_Store
+
+# reference copy of the old .dc.html site, not part of the Astro build
+_legacy-reference/
