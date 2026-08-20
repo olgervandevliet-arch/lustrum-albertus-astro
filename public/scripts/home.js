@@ -310,6 +310,33 @@
       waitForReveal(releaseLetters);
     }
 
+    const tvVideo = document.querySelector('[data-tv-video]');
+    if (tvVideo) {
+      const tryPlayTvVideo = () => { tvVideo.play().catch(() => {}); };
+      waitForReveal(tryPlayTvVideo);
+      tvVideo.addEventListener('loadedmetadata', tryPlayTvVideo);
+      tvVideo.addEventListener('canplay', tryPlayTvVideo);
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden && tvVideo.paused) tryPlayTvVideo();
+      });
+      // recover from a stuck/broken load (seen in the wild as "video doesn't always load"):
+      // if it errors out or stops making progress for a while, force a fresh load + play
+      tvVideo.addEventListener('error', () => { tvVideo.load(); tryPlayTvVideo(); });
+      let lastCt = -1;
+      let stallTicks = 0;
+      setInterval(() => {
+        if (document.hidden) return;
+        if (tvVideo.paused) { tryPlayTvVideo(); return; }
+        if (tvVideo.currentTime === lastCt) {
+          stallTicks++;
+          if (stallTicks >= 3) { stallTicks = 0; tvVideo.load(); tryPlayTvVideo(); }
+        } else {
+          stallTicks = 0;
+          lastCt = tvVideo.currentTime;
+        }
+      }, 2000);
+    }
+
     const tl = gsap.timeline({
       scrollTrigger: { trigger: wrap, start: 'top top', end: 'bottom bottom', scrub: 0.3 },
     });
