@@ -27,6 +27,15 @@ const mobileItems = [
     [data-logo-label] { display: none; }
   }
 
+  /* correct closed-state width from first paint, matching the JS logic exactly,
+     so there's never a flash of the wrong (wide) pill before init runs */
+  @media (hover: none), (max-width: 900px) {
+    /* no !important: this is only the correct pre-JS default so there's no
+       flash of the wrong width — once JS/GSAP sets an inline width (e.g. to
+       open the menu), that inline style naturally takes over from here */
+    [data-nav] { width: min(240px, 82vw); }
+  }
+
   .header-bar-close:hover { color: #FFFFFF; }
   .header-info-trigger:hover { background: rgba(255,255,255,0.08); }
   .header-nav-link:hover { background: rgba(255,255,255,0.08); }

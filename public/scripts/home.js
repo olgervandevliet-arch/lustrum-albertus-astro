@@ -224,7 +224,7 @@
     const counter = document.querySelector('[data-counter]');
     if (!wrap || !letters.length) return;
 
-    const screens = 1;
+    const screens = 0.6;
     wrap.style.height = (screens + 1) * 100 + 'vh';
     gsap.set(counter, { opacity: 1, y: 0 });
 
@@ -232,16 +232,21 @@
       clearTimeout(safetyTimer);
       safetyTimer = setTimeout(() => {
         gsap.set(counter, { opacity: 1 });
-        letters.forEach((el) => gsap.set(el, { y: restY(), x: 0, rotate: Number(el.dataset.rot) || 0 }));
-      }, 1500);
+        letters.forEach((el) => gsap.set(el, { y: restY(el), x: 0, rotate: Number(el.dataset.rot) || 0 }));
+      }, 2800);
     };
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const preloaderActive = !!document.querySelector('[data-preloader]');
 
-    const perLetterNeed = (el) => window.innerHeight - 120 - (el.offsetTop + (el.offsetHeight || 300));
-    const extraDrop = Math.max(0, ...letters.map(perLetterNeed));
-    const restY = () => extraDrop;
+    // all letters fall by the SAME amount so their hand-tuned relative vertical
+    // offsets (and thus the stacked/piled look) are preserved, rather than each
+    // one bottom-aligning to the same line (which flattens the pile and can make
+    // taller letters overlap shorter ones). The uniform drop is the smallest
+    // amount any single letter needs, plus a bit extra to sit the whole pile lower.
+    const perLetterNeed = (el) => Math.max(0, window.innerHeight - 120 - (el.offsetTop + (el.offsetHeight || 300)));
+    const uniformDrop = Math.min(...letters.map(perLetterNeed)) + window.innerHeight * 0.4;
+    const restY = () => uniformDrop;
 
     letters.forEach((el) => {
       if (preloaderActive && !reduced) {
@@ -266,24 +271,19 @@
           const h = () => el.offsetHeight || 300;
           const rest = restY(el);
           const t = i * step;
+          const fallDuration = 0.95;
 
           introTimeline.fromTo(
             el,
             { y: () => -(window.innerHeight * 0.85 + h()), x: 0, rotate: rot - 14, immediateRender: true },
-            { y: rest, rotate: rot, duration: 0.68, ease: 'power2.in' },
+            { y: rest, rotate: rot, duration: fallDuration, ease: 'power2.in' },
             t
           );
           introTimeline
-            .to(el, { x: sway, y: rest - h() * 0.1, rotate: rot + sway / 5, duration: 0.16, ease: 'power2.out' }, t + 0.46)
-            .to(el, { x: sway * 0.4, y: rest, rotate: rot + sway / 12, duration: 0.15, ease: 'power2.in' }, t + 0.62)
-            .to(el, { x: 0, rotate: rot, duration: 0.22, ease: 'power2.out' }, t + 0.77);
+            .to(el, { x: sway, y: rest - h() * 0.1, rotate: rot + sway / 5, duration: 0.16, ease: 'power2.out' }, t + fallDuration)
+            .to(el, { x: sway * 0.4, y: rest, rotate: rot + sway / 12, duration: 0.15, ease: 'power2.in' }, t + fallDuration + 0.16)
+            .to(el, { x: 0, rotate: rot, duration: 0.22, ease: 'power2.out' }, t + fallDuration + 0.31);
         });
-        introTimeline.fromTo(
-          counter,
-          { y: 70, opacity: 0.999 },
-          { y: 0, opacity: 1, duration: 1.05, ease: 'power3.out' },
-          letters.length * step + 0.15
-        );
       } catch (e) {
         letters.forEach((el) => gsap.set(el, { y: restY(el), x: 0, rotate: Number(el.dataset.rot) || 0 }));
         gsap.set(counter, { y: 0, opacity: 1 });
@@ -292,9 +292,17 @@
 
     const releaseLetters = () => { armSafety(); runLetterIntro(); };
     const waitForReveal = (fn) => {
+      let called = false;
+      const runOnce = () => {
+        if (called) return;
+        called = true;
+        fn();
+      };
       const pt = window.__pageTransition;
-      if (pt && pt.onRevealed) pt.onRevealed(fn);
-      else fn();
+      // on a plain page load (not an in-app curtain navigation) the reveal
+      // callback may simply never fire, so always arm a fallback timer too
+      if (pt && pt.onRevealed) pt.onRevealed(runOnce);
+      setTimeout(runOnce, pt && pt.onRevealed ? 700 : 0);
     };
     if (preloaderActive) {
       startLetterIntro = () => waitForReveal(releaseLetters);
@@ -313,7 +321,34 @@
       tl.to(el, { yPercent: -(160 + speed * 480), scale: 1 + speed * 0.35, ease: 'none' }, 0);
       tl.to(el, { x: () => window.innerWidth * dx * 1.6, rotate: rot + (dx >= 0 ? 13 : -12), ease: 'power1.in' }, 0.22);
     });
-    tl.to(counter, { y: -60, scale: 1.08, ease: 'none' }, 0);
+    tl.to(counter, { y: -20, ease: 'none' }, 0);
+
+    // the TV grows as you scroll, staying anchored so it keeps resting on the counter box
+    const isMobileLayout = window.matchMedia('(max-width: 980px)').matches;
+    const tvWrap = document.querySelector('[data-tv-wrap]');
+    const glassBox = document.querySelector('[data-counter-glass]');
+    if (isMobileLayout && tvWrap) {
+      // mobile: grows centered, up to the site's content width, bottom-anchored
+      gsap.set(tvWrap, { xPercent: -50, transformOrigin: '50% 100%' });
+      const startWidth = tvWrap.getBoundingClientRect().width;
+      const gutter = window.innerWidth * 0.12;
+      const targetWidth = Math.min(1240, window.innerWidth - gutter);
+      const targetScale = startWidth > 0 ? targetWidth / startWidth : 1;
+      tl.to(tvWrap, { scale: targetScale, duration: 0.8, ease: 'none' }, 0);
+    } else if (tvWrap && glassBox) {
+      // desktop: grows a bit and slides toward the middle of the counter box,
+      // anchored bottom-right so it keeps resting on the box throughout
+      gsap.set(tvWrap, { transformOrigin: '100% 100%' });
+      const tvRect = tvWrap.getBoundingClientRect();
+      const boxRect = glassBox.getBoundingClientRect();
+      const targetScale = 1.8;
+      const endWidth = tvRect.width * targetScale;
+      const endLeft = tvRect.right - endWidth;
+      const endCenterX = endLeft + endWidth / 2;
+      const targetCenterX = boxRect.left + boxRect.width / 2;
+      const dx = targetCenterX - endCenterX;
+      tl.to(tvWrap, { scale: targetScale, x: dx, duration: 0.8, ease: 'none' }, 0);
+    }
 
     const title = document.querySelector('[data-hero-title]');
     const setupTitleSplit = () => {
@@ -341,7 +376,7 @@
     }
 
     const gradient = document.querySelector('[data-gradient]');
-    if (gradient) tl.fromTo(gradient, { yPercent: -6 }, { yPercent: -70, ease: 'none' }, 0);
+    if (gradient) tl.fromTo(gradient, { yPercent: -6 }, { yPercent: -105, duration: 0.4, ease: 'none' }, 0);
 
     scrollTriggers = window.ScrollTrigger.getAll();
   }
