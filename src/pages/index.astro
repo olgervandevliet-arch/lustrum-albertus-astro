@@ -3,9 +3,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import CountdownFlap from '../components/CountdownFlap.astro';
-import site from '../data/site.json';
+import homeContent from '../data/pages/home.json';
 
-const TARGET_DATE = site.countdownTargetDate;
+const TARGET_DATE = homeContent.countdownTargetDate;
 const diff = Math.max(0, Date.parse(TARGET_DATE) - Date.now());
 const total = Math.floor(diff / 1000);
 const pad = (n: number, len: number) => String(n).padStart(len, '0');
@@ -14,17 +14,7 @@ const h = pad(Math.floor(total / 3600) % 24, 2);
 const m = pad(Math.floor(total / 60) % 60, 2);
 const s = pad(total % 60, 2);
 
-const videos = [
-  {
-    available: true,
-    title: 'Spaarplannen',
-    thumbnail: 'https://img.youtube.com/vi/_9Bqm_jLp-s/hqdefault.jpg',
-    embed: 'https://www.youtube.com/embed/_9Bqm_jLp-s',
-  },
-  { comingSoon: true },
-  { comingSoon: true },
-  { comingSoon: true },
-];
+const videos = homeContent.videos;
 
 const letters = [
   { id: 'S', left: '12.6vw', top: '18.6vh', size: '35vw', dx: '0.15', rot: '-9', speed: '1.2', sway: '-50' },

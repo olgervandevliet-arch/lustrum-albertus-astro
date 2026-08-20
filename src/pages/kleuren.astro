@@ -2,8 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { colors } from '../data/colors.json';
-import { kleuren as pageContent } from '../data/pages.json';
+import pageContent from '../data/pages/kleuren.json';
+const { colors } = pageContent;
 ---
 
 <BaseLayout

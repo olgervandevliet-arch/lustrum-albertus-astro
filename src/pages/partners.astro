@@ -2,8 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { partners } from '../data/partners.json';
-import { partners as pageContent } from '../data/pages.json';
+import pageContent from '../data/pages/partners.json';
+const { partners } = pageContent;
 ---
 
 <BaseLayout

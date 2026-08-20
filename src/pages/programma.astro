@@ -3,19 +3,20 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ComingSoon from '../components/ComingSoon.astro';
+import pageContent from '../data/pages/programma.json';
 ---
 
 <BaseLayout
-  title="Programma — Lustrum Albertus Magnus XXVI"
-  description="Het volledige programma van Lustrum Albertus Magnus XXVI wordt binnenkort bekendgemaakt. Houd deze pagina en Instagram in de gaten."
+  title={`${pageContent.title} — Lustrum Albertus Magnus XXVI`}
+  description={pageContent.description}
   path="/programma"
 >
   <div id="top" style="position: relative; background: linear-gradient(180deg, #3B4C99 0%, #4557A4 55%, #4557A4 100%); font-family: 'Inter', system-ui, sans-serif; min-height: 100vh; display: flex; flex-direction: column;">
     <Header />
     <ComingSoon
-      icon="ph ph-calendar-dots"
-      eyebrow="Programma"
-      description="Het volledige programma van Lustrum Albertus Magnus XXVI wordt binnenkort bekendgemaakt. Houd deze pagina en onze Instagram in de gaten."
+      icon={pageContent.icon}
+      eyebrow={pageContent.eyebrow}
+      description={pageContent.description}
     />
     <Footer />
   </div>

@@ -1,0 +1,15 @@
+{
+  "countdownTargetDate": "2027-08-18T20:00:00",
+  "videos": [
+    {
+      "available": true,
+      "comingSoon": false,
+      "title": "Spaarplannen",
+      "thumbnail": "https://img.youtube.com/vi/_9Bqm_jLp-s/hqdefault.jpg",
+      "embed": "https://www.youtube.com/embed/_9Bqm_jLp-s"
+    },
+    { "available": false, "comingSoon": true, "title": "", "thumbnail": "", "embed": "" },
+    { "available": false, "comingSoon": true, "title": "", "thumbnail": "", "embed": "" },
+    { "available": false, "comingSoon": true, "title": "", "thumbnail": "", "embed": "" }
+  ]
+}

@@ -1,4 +1,7 @@
 {
+  "eyebrow": "Contact",
+  "title": "Neem contact op",
+  "description": "Vragen over het lustrum, sponsoring of een van de commissies? De lustrumcommissie helpt je graag verder.",
   "board": [
     { "name": "Chloé Groeneveld", "role": "Praeses", "photo": "/uploads/Chloe.webp" },
     { "name": "Frédérique Leenman", "role": "Abactis", "photo": "/uploads/Frederique.webp" },

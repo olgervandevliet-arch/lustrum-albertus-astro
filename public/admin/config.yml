@@ -12,11 +12,11 @@ media_folder: "public/uploads"
 public_folder: "/uploads"
 
 collections:
-  - name: "site"
-    label: "Site-instellingen"
+  - name: "general"
+    label: "Algemeen"
     files:
       - name: "site"
-        label: "Algemeen"
+        label: "Site-instellingen"
         file: "src/data/site.json"
         fields:
           - { label: "Tekst mededelingenbalk", name: "announcementText", widget: "string" }
@@ -31,91 +31,34 @@ collections:
             hint: "Exact formaat: JJJJ-MM-DDTUU:MM:SS, bijv. 2027-08-18T20:00:00"
 
   - name: "pages"
-    label: "Paginateksten"
+    label: "Pagina's"
     files:
-      - name: "pages"
-        label: "Introteksten per pagina"
-        file: "src/data/pages.json"
+      - name: "home"
+        label: "Home"
+        file: "src/data/pages/home.json"
         fields:
-          - label: "Spaarpakketten"
-            name: "pakketten"
-            widget: "object"
-            fields:
-              - { label: "Eyebrow", name: "eyebrow", widget: "string" }
-              - { label: "Titel", name: "title", widget: "string" }
-              - { label: "Beschrijving", name: "description", widget: "text" }
-          - label: "Partners & sponsoren"
-            name: "partners"
-            widget: "object"
-            fields:
-              - { label: "Eyebrow", name: "eyebrow", widget: "string" }
-              - { label: "Titel", name: "title", widget: "string" }
-              - { label: "Beschrijving", name: "description", widget: "text" }
-          - label: "FAQ"
-            name: "faq"
-            widget: "object"
-            fields:
-              - { label: "Eyebrow", name: "eyebrow", widget: "string" }
-              - { label: "Titel", name: "title", widget: "string" }
-              - { label: "Beschrijving", name: "description", widget: "text" }
-          - label: "Contact"
-            name: "contact"
-            widget: "object"
-            fields:
-              - { label: "Eyebrow", name: "eyebrow", widget: "string" }
-              - { label: "Titel", name: "title", widget: "string" }
-              - { label: "Beschrijving", name: "description", widget: "text" }
-          - label: "Kleuren"
-            name: "kleuren"
-            widget: "object"
-            fields:
-              - { label: "Titel", name: "title", widget: "string" }
-              - { label: "Beschrijving", name: "description", widget: "text" }
-
-  - name: "colors"
-    label: "Kleuren"
-    files:
-      - name: "colors"
-        label: "Lustrumkleuren"
-        file: "src/data/colors.json"
-        fields:
-          - label: "Kleuren"
-            name: "colors"
+          - label: "Countdown datum/tijd"
+            name: "countdownTargetDate"
+            widget: "string"
+            hint: "Exact formaat: JJJJ-MM-DDTUU:MM:SS, bijv. 2027-08-18T20:00:00"
+          - label: "Video's"
+            name: "videos"
             widget: "list"
-            summary: "{{fields.name}} — {{fields.hex}}"
+            summary: "{{fields.title}}"
             fields:
-              - { label: "Naam", name: "name", widget: "string" }
-              - { label: "HEX", name: "hex", widget: "color", enableAlpha: false }
-              - { label: "Tekstkleur op deze achtergrond (HEX)", name: "onHex", widget: "color", enableAlpha: false }
-              - { label: "RGB", name: "rgb", widget: "string" }
-              - { label: "CMYK", name: "cmyk", widget: "string" }
-              - { label: "Pantone", name: "pantone", widget: "string" }
-              - { label: "RAL", name: "ral", widget: "string" }
-              - { label: "Link naar verf", name: "url", widget: "string" }
+              - { label: "Beschikbaar (anders 'Coming soon')", name: "available", widget: "boolean", default: false }
+              - { label: "Coming soon", name: "comingSoon", widget: "boolean", default: true }
+              - { label: "Titel", name: "title", widget: "string", required: false }
+              - { label: "Thumbnail-afbeelding URL", name: "thumbnail", widget: "string", required: false }
+              - { label: "YouTube embed-URL", name: "embed", widget: "string", required: false }
 
-  - name: "board"
-    label: "Bestuursleden"
-    files:
-      - name: "board"
-        label: "Lustrumbestuur"
-        file: "src/data/board.json"
-        fields:
-          - label: "Bestuursleden"
-            name: "board"
-            widget: "list"
-            summary: "{{fields.name}} — {{fields.role}}"
-            fields:
-              - { label: "Naam", name: "name", widget: "string" }
-              - { label: "Functie", name: "role", widget: "string" }
-              - { label: "Foto", name: "photo", widget: "image" }
-
-  - name: "packages"
-    label: "Spaarpakketten"
-    files:
-      - name: "packages"
+      - name: "pakketten"
         label: "Spaarpakketten"
-        file: "src/data/packages.json"
+        file: "src/data/pages/pakketten.json"
         fields:
+          - { label: "Eyebrow", name: "eyebrow", widget: "string" }
+          - { label: "Titel", name: "title", widget: "string" }
+          - { label: "Beschrijving", name: "description", widget: "text" }
           - label: "Pakketten"
             name: "packages"
             widget: "list"
@@ -130,13 +73,13 @@ collections:
                 widget: "list"
                 field: { label: "Kenmerk", name: "feature", widget: "string" }
 
-  - name: "partners"
-    label: "Partners & sponsoren"
-    files:
       - name: "partners"
-        label: "Partners"
-        file: "src/data/partners.json"
+        label: "Partners & sponsoren"
+        file: "src/data/pages/partners.json"
         fields:
+          - { label: "Eyebrow", name: "eyebrow", widget: "string" }
+          - { label: "Titel", name: "title", widget: "string" }
+          - { label: "Beschrijving", name: "description", widget: "text" }
           - label: "Partners"
             name: "partners"
             widget: "list"
@@ -146,13 +89,13 @@ collections:
               - { label: "Beschrijving", name: "desc", widget: "text" }
               - { label: "Logo", name: "src", widget: "image" }
 
-  - name: "faq"
-    label: "Veelgestelde vragen"
-    files:
       - name: "faq"
-        label: "FAQ"
-        file: "src/data/faq.json"
+        label: "Veelgestelde vragen"
+        file: "src/data/pages/faq.json"
         fields:
+          - { label: "Eyebrow", name: "eyebrow", widget: "string" }
+          - { label: "Titel", name: "title", widget: "string" }
+          - { label: "Beschrijving", name: "description", widget: "text" }
           - label: "Vragen"
             name: "faqs"
             widget: "list"
@@ -160,3 +103,66 @@ collections:
             fields:
               - { label: "Vraag", name: "q", widget: "string" }
               - { label: "Antwoord", name: "a", widget: "text" }
+
+      - name: "contact"
+        label: "Contact"
+        file: "src/data/pages/contact.json"
+        fields:
+          - { label: "Eyebrow", name: "eyebrow", widget: "string" }
+          - { label: "Titel", name: "title", widget: "string" }
+          - { label: "Beschrijving", name: "description", widget: "text" }
+          - label: "Bestuursleden"
+            name: "board"
+            widget: "list"
+            summary: "{{fields.name}} — {{fields.role}}"
+            fields:
+              - { label: "Naam", name: "name", widget: "string" }
+              - { label: "Functie", name: "role", widget: "string" }
+              - { label: "Foto", name: "photo", widget: "image" }
+
+      - name: "kleuren"
+        label: "Kleuren"
+        file: "src/data/pages/kleuren.json"
+        fields:
+          - { label: "Titel", name: "title", widget: "string" }
+          - { label: "Beschrijving", name: "description", widget: "text" }
+          - label: "Kleuren"
+            name: "colors"
+            widget: "list"
+            summary: "{{fields.name}} — {{fields.hex}}"
+            fields:
+              - { label: "Naam", name: "name", widget: "string" }
+              - { label: "HEX", name: "hex", widget: "color", enableAlpha: false }
+              - { label: "Tekstkleur op deze achtergrond (HEX)", name: "onHex", widget: "color", enableAlpha: false }
+              - { label: "RGB", name: "rgb", widget: "string" }
+              - { label: "CMYK", name: "cmyk", widget: "string" }
+              - { label: "Pantone", name: "pantone", widget: "string" }
+              - { label: "RAL", name: "ral", widget: "string" }
+              - { label: "Link naar verf", name: "url", widget: "string" }
+
+      - name: "thema"
+        label: "Thema"
+        file: "src/data/pages/thema.json"
+        fields:
+          - { label: "Titel", name: "title", widget: "string" }
+          - { label: "Eyebrow", name: "eyebrow", widget: "string" }
+          - { label: "Beschrijving", name: "description", widget: "text" }
+          - { label: "Icoon (Phosphor-icon class)", name: "icon", widget: "string" }
+
+      - name: "terrein"
+        label: "Terrein"
+        file: "src/data/pages/terrein.json"
+        fields:
+          - { label: "Titel", name: "title", widget: "string" }
+          - { label: "Eyebrow", name: "eyebrow", widget: "string" }
+          - { label: "Beschrijving", name: "description", widget: "text" }
+          - { label: "Icoon (Phosphor-icon class)", name: "icon", widget: "string" }
+
+      - name: "programma"
+        label: "Programma"
+        file: "src/data/pages/programma.json"
+        fields:
+          - { label: "Titel", name: "title", widget: "string" }
+          - { label: "Eyebrow", name: "eyebrow", widget: "string" }
+          - { label: "Beschrijving", name: "description", widget: "text" }
+          - { label: "Icoon (Phosphor-icon class)", name: "icon", widget: "string" }
