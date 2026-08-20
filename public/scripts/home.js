@@ -321,33 +321,49 @@
       tl.to(el, { yPercent: -(160 + speed * 480), scale: 1 + speed * 0.35, ease: 'none' }, 0);
       tl.to(el, { x: () => window.innerWidth * dx * 1.6, rotate: rot + (dx >= 0 ? 13 : -12), ease: 'power1.in' }, 0.22);
     });
-    tl.to(counter, { y: -20, ease: 'none' }, 0);
+    // the counter is free to drift down (even past the dark section) — the TV
+    // is positioned independently below so it always ends up centered
+    const counterStartRect = counter.getBoundingClientRect();
+    const counterTargetY = window.innerHeight - counterStartRect.top + 40;
+    tl.to(counter, { y: counterTargetY, ease: 'none' }, 0);
 
-    // the TV grows as you scroll, staying anchored so it keeps resting on the counter box
     const isMobileLayout = window.matchMedia('(max-width: 980px)').matches;
     const tvWrap = document.querySelector('[data-tv-wrap]');
     const glassBox = document.querySelector('[data-counter-glass]');
-    if (isMobileLayout && tvWrap) {
-      // mobile: grows centered, up to the site's content width, bottom-anchored
-      gsap.set(tvWrap, { xPercent: -50, transformOrigin: '50% 100%' });
-      const startWidth = tvWrap.getBoundingClientRect().width;
-      const gutter = window.innerWidth * 0.12;
-      const targetWidth = Math.min(1240, window.innerWidth - gutter);
-      const targetScale = startWidth > 0 ? targetWidth / startWidth : 1;
-      tl.to(tvWrap, { scale: targetScale, duration: 0.8, ease: 'none' }, 0);
-    } else if (tvWrap && glassBox) {
-      // desktop: grows a bit and slides toward the middle of the counter box,
-      // anchored bottom-right so it keeps resting on the box throughout
-      gsap.set(tvWrap, { transformOrigin: '100% 100%' });
-      const tvRect = tvWrap.getBoundingClientRect();
-      const boxRect = glassBox.getBoundingClientRect();
-      const targetScale = 1.8;
-      const endWidth = tvRect.width * targetScale;
-      const endLeft = tvRect.right - endWidth;
-      const endCenterX = endLeft + endWidth / 2;
-      const targetCenterX = boxRect.left + boxRect.width / 2;
-      const dx = targetCenterX - endCenterX;
-      tl.to(tvWrap, { scale: targetScale, x: dx, duration: 0.8, ease: 'none' }, 0);
+    if (tvWrap) {
+      const tvRectStart = tvWrap.getBoundingClientRect();
+      // the TV's bottom edge stays fixed while it scales (bottom-anchored
+      // transform-origin below), so that's the reference point for centering
+      const tvBottomFixed = tvRectStart.bottom;
+      let finalTvHeight = tvRectStart.height;
+      let targetScale = 1;
+      let targetX = 0;
+
+      if (isMobileLayout) {
+        // mobile: grows centered, up to the site's content width
+        gsap.set(tvWrap, { xPercent: -50, transformOrigin: '50% 100%' });
+        const gutter = window.innerWidth * 0.12;
+        const targetWidth = Math.min(1240, window.innerWidth - gutter);
+        targetScale = tvRectStart.width > 0 ? targetWidth / tvRectStart.width : 1;
+        finalTvHeight = tvRectStart.height * targetScale;
+      } else if (glassBox) {
+        // desktop: grows a bit and slides toward the middle of the counter box
+        gsap.set(tvWrap, { transformOrigin: '100% 100%' });
+        const boxRect = glassBox.getBoundingClientRect();
+        targetScale = 1.8;
+        finalTvHeight = tvRectStart.height * targetScale;
+        const endWidth = tvRectStart.width * targetScale;
+        const endLeft = tvRectStart.right - endWidth;
+        const endCenterX = endLeft + endWidth / 2;
+        const targetCenterX = boxRect.left + boxRect.width / 2;
+        targetX = targetCenterX - endCenterX;
+      }
+
+      // tvWrap inherits the counter's own y-movement too (it's a child of it),
+      // so that has to be cancelled out before adding this tween's own offset
+      const finalCenterBeforeOwnY = tvBottomFixed - finalTvHeight / 2 + counterTargetY;
+      const targetY = window.innerHeight / 2 - finalCenterBeforeOwnY;
+      tl.to(tvWrap, { scale: targetScale, x: targetX, y: targetY, duration: 0.8, ease: 'none' }, 0);
     }
 
     const title = document.querySelector('[data-hero-title]');
