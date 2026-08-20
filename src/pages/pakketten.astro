@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { packages } from '../data/packages.json';
+import { pakketten as pageContent } from '../data/pages.json';
 ---
 
 <BaseLayout
@@ -23,9 +24,9 @@ import { packages } from '../data/packages.json';
     <Header />
 
     <section style="max-width: 1240px; margin: 0 auto; padding: clamp(150px, 16vw, 200px) 6vw clamp(30px, 4vw, 50px);">
-      <div style="font-family: 'Inter Tight', sans-serif; font-weight: 600; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: #9FD8E0; margin-bottom: 14px;">Sparen voor XXVI</div>
-      <h1 style="margin: 0 0 18px; font-family: 'Inter Tight', sans-serif; font-weight: 700; font-size: clamp(38px, 6vw, 84px); line-height: 1.02; letter-spacing: -0.02em; color: #BFF7F7;">Spaarpakketten</h1>
-      <p style="margin: 0; max-width: 700px; font-size: clamp(16px, 1.6vw, 19px); line-height: 1.65; color: #DCEAFF;">Deze KEI-week zijn de spaarpakketten bekendgemaakt en kan het sparen voor het 26e Lustrum officieel beginnen! Kies het pakket dat bij je past en geef je keuze door via de link onderaan deze pagina.</p>
+      <div style="font-family: 'Inter Tight', sans-serif; font-weight: 600; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: #9FD8E0; margin-bottom: 14px;">{pageContent.eyebrow}</div>
+      <h1 style="margin: 0 0 18px; font-family: 'Inter Tight', sans-serif; font-weight: 700; font-size: clamp(38px, 6vw, 84px); line-height: 1.02; letter-spacing: -0.02em; color: #BFF7F7;">{pageContent.title}</h1>
+      <p style="margin: 0; max-width: 700px; font-size: clamp(16px, 1.6vw, 19px); line-height: 1.65; color: #DCEAFF;">{pageContent.description}</p>
     </section>
 
     <section style="max-width: 1240px; margin: 0 auto; padding: clamp(20px, 3vw, 40px) 6vw clamp(30px, 4vw, 50px);">

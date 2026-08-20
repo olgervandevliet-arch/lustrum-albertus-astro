@@ -1,4 +1,6 @@
 ---
+import site from '../data/site.json';
+
 export interface Props {
   icon: string;
   eyebrow: string;
@@ -13,7 +15,7 @@ const { icon, eyebrow, description } = Astro.props;
   <div style="font-family: 'Inter Tight', sans-serif; font-weight: 600; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: #9FD8E0; margin-bottom: 16px;">{eyebrow}</div>
   <h1 style="margin: 0 0 18px; font-family: 'Inter Tight', sans-serif; font-weight: 700; font-size: clamp(40px, 7vw, 96px); line-height: 1; letter-spacing: -0.02em; color: #BFF7F7;">Coming soon</h1>
   <p style="margin: 0 0 30px; max-width: 520px; font-size: clamp(16px, 1.6vw, 19px); line-height: 1.6; color: #DCEAFF;">{description}</p>
-  <a href="https://www.instagram.com/lustrumalbertus/" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 8px; color: #FFFFFF; text-decoration: underline; text-underline-offset: 3px; font-weight: 600;">
+  <a href={site.instagramUrl} target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 8px; color: #FFFFFF; text-decoration: underline; text-underline-offset: 3px; font-weight: 600;">
     <i class="ph ph-instagram-logo"></i> Volg ons op Instagram
   </a>
 </section>

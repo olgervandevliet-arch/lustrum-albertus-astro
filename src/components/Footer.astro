@@ -1,3 +1,7 @@
+---
+import site from '../data/site.json';
+---
+
 <style>
   .footer-privacy-link:hover {
     text-decoration: underline;
@@ -5,8 +9,8 @@
   }
 </style>
 
-<footer style="position: relative; background: #4557A4; font-family: 'Inter', system-ui, sans-serif; color: #E6F4FF; overflow: hidden;">
-  <div style="position: relative; width: 100%; aspect-ratio: 1200 / 320; padding: 0 6vw; box-sizing: border-box; overflow: hidden; border-top: 1px solid rgba(255,255,255,0.22);">
+<footer style="position: relative; background: #4557A4; font-family: 'Inter', system-ui, sans-serif; color: #E6F4FF; overflow: hidden; border-top: 1px solid rgba(255,255,255,0.22);">
+  <div style="position: relative; max-width: 1240px; margin: 0 auto; width: 100%; aspect-ratio: 1200 / 320; padding: 0 6vw; overflow: hidden;">
     <svg viewBox="0 0 1200 320" style="display: block; width: 100%; height: 100%;">
       <path d="M1200 -36V367.065H1126.96V-36H1200Z" fill="#BFF7F7"></path>
       <path d="M800.723 -36L905.412 281.041H909.74L1014.43 -36H1094.5L952.481 367.065H862.671L720.381 -36H800.723Z" fill="#BFF7F7"></path>
@@ -14,11 +18,13 @@
       <path d="M84.9411 -36L173.669 111.7H176.916L265.914 -36H349.232L225.067 165.803L351.126 367.065H266.726L176.916 220.446H173.669L83.8591 367.065H0L127.141 165.803L1.62308 -36H84.9411Z" fill="#BFF7F7"></path>
     </svg>
   </div>
-  <div style="max-width: 1240px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; padding: 22px 6vw 26px; border-top: 1px solid rgba(255,255,255,0.22); font-size: 15px; font-weight: 500; padding-top: 40px; padding-bottom: 40px">
-    <div style="display: flex; align-items: center; gap: min(6vw, 60px); flex-wrap: wrap;">
-      <span>© Lustrum Albertus Magnus</span>
-      <a href="#privacy" class="footer-privacy-link" style="color: #E6F4FF; text-decoration: none;">Privacyverklaring</a>
+  <div style="border-top: 1px solid rgba(255,255,255,0.22);">
+    <div style="max-width: 1240px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; padding: 22px 6vw 26px; font-size: 15px; font-weight: 500; padding-top: 40px; padding-bottom: 40px">
+      <div style="display: flex; align-items: center; gap: min(6vw, 60px); flex-wrap: wrap;">
+        <span>{site.footerCopyright}</span>
+        <a href="#privacy" class="footer-privacy-link" style="color: #E6F4FF; text-decoration: none;">Privacyverklaring</a>
+      </div>
+      <div>Website door <a href="https://webwavers.nl" target="_blank" rel="noopener" style="color: #FFFFFF; text-decoration: underline; text-underline-offset: 3px;">Webwavers</a></div>
     </div>
-    <div>Website door <a href="https://webwavers.nl" target="_blank" rel="noopener" style="color: #FFFFFF; text-decoration: underline; text-underline-offset: 3px;">Webwavers</a></div>
   </div>
 </footer>

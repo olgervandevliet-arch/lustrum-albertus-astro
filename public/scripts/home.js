@@ -1,5 +1,5 @@
 (() => {
-  const TARGET_DATE = '2027-08-18T20:00:00';
+  const TARGET_DATE = document.querySelector('[data-target-date]')?.dataset.targetDate || '2027-08-18T20:00:00';
 
   /* ---------- countdown flap tiles ---------- */
   const flapAnimating = new Set();
@@ -122,7 +122,7 @@
     const setup = () => {
       els.forEach((el) => {
         el.style.overflow = 'hidden';
-        const split = new window.SplitText(el, { type: 'chars' });
+        const split = new window.SplitText(el, { type: 'words, chars' });
         gsap.set(split.chars, { opacity: 0, yPercent: 120 });
         const play = () => {
           gsap.killTweensOf(split.chars);
@@ -177,7 +177,7 @@
       },
     });
     texts.forEach((t, i) => {
-      const split = new window.SplitText(t, { type: 'chars' });
+      const split = new window.SplitText(t, { type: 'words, chars' });
       gsap.set(t, { opacity: 1 });
       gsap.set(split.chars, { opacity: 0, yPercent: 120 });
       tl.to(split.chars, { opacity: 1, yPercent: 0, duration: 0.4, stagger: 0.02, ease: 'power2.out' });
@@ -317,7 +317,7 @@
 
     const title = document.querySelector('[data-hero-title]');
     const setupTitleSplit = () => {
-      const split = window.SplitText ? new window.SplitText(title, { type: 'chars' }) : null;
+      const split = window.SplitText ? new window.SplitText(title, { type: 'words, chars' }) : null;
       const chars = split ? split.chars : [title];
       gsap.set(chars, { opacity: 0, yPercent: 120 });
       let shown = false;

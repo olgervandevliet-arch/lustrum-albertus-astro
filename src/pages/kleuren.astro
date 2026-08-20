@@ -2,29 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-
-const colors = [
-  {
-    name: 'Violet Velvet',
-    hex: '#677BC0',
-    onHex: '#FFFFFF',
-    rgb: '103, 123, 192',
-    cmyk: 'C46 M36 Y0 K25',
-    pantone: '272 C',
-    ral: '5024 — Pastelblauw',
-    url: 'https://www.verf-plaza.nl/kleur/violet-velvet-pb2848-5019/',
-  },
-  {
-    name: 'Serene Green',
-    hex: '#91E9EB',
-    onHex: '#14245C',
-    rgb: '145, 233, 235',
-    cmyk: 'C38 M1 Y0 K8',
-    pantone: '318 C',
-    ral: '6027 — Lichtgroen',
-    url: 'https://www.verf-plaza.nl/kleur/serene-green-g1798-2441/',
-  },
-];
+import { colors } from '../data/colors.json';
+import { kleuren as pageContent } from '../data/pages.json';
 ---
 
 <BaseLayout
@@ -44,8 +23,8 @@ const colors = [
     <Header />
 
     <section style="max-width: 1240px; margin: 0 auto; padding: clamp(130px, 14vw, 170px) 6vw clamp(50px, 14vw, 90px); text-align: center;">
-      <h1 style="margin: 0 0 18px; font-family: 'Inter Tight', sans-serif; font-weight: 700; font-size: clamp(38px, 6vw, 84px); line-height: 1.02; letter-spacing: -0.02em; color: #BFF7F7;">Kleuren</h1>
-      <p style="margin: 0 auto; max-width: 620px; font-size: clamp(16px, 1.6vw, 19px); line-height: 1.65; color: #DCEAFF;">Ga je je GK verven? Dit zijn de officiële kleuren van Lustrum Albertus XXVI — de juiste tinten om je woonkamer in te zetten. Gebruik onderstaande codes, zodat de kleur overal precies klopt.</p>
+      <h1 style="margin: 0 0 18px; font-family: 'Inter Tight', sans-serif; font-weight: 700; font-size: clamp(38px, 6vw, 84px); line-height: 1.02; letter-spacing: -0.02em; color: #BFF7F7;">{pageContent.title}</h1>
+      <p style="margin: 0 auto; max-width: 620px; font-size: clamp(16px, 1.6vw, 19px); line-height: 1.65; color: #DCEAFF;">{pageContent.description}</p>
     </section>
 
     <div data-color-grid style="display: grid; grid-template-columns: 1fr 1fr;">

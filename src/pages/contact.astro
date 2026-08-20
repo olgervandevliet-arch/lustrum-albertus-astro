@@ -3,6 +3,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { board } from '../data/board.json';
+import site from '../data/site.json';
+import { contact as pageContent } from '../data/pages.json';
 ---
 
 <BaseLayout
@@ -23,25 +25,25 @@ import { board } from '../data/board.json';
     <Header />
 
     <section style="max-width: 1240px; margin: 0 auto; padding: clamp(150px, 16vw, 200px) 6vw clamp(50px, 6vw, 80px);">
-      <div style="font-family: 'Inter Tight', sans-serif; font-weight: 600; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: #9FD8E0; margin-bottom: 14px;">Contact</div>
-      <h1 style="margin: 0 0 18px; font-family: 'Inter Tight', sans-serif; font-weight: 700; font-size: clamp(38px, 6vw, 84px); line-height: 1.02; letter-spacing: -0.02em; color: #BFF7F7;">Neem contact op</h1>
-      <p style="margin: 0; max-width: 620px; font-size: clamp(16px, 1.6vw, 19px); line-height: 1.6; color: #DCEAFF;">Vragen over het lustrum, sponsoring of een van de commissies? De lustrumcommissie helpt je graag verder.</p>
+      <div style="font-family: 'Inter Tight', sans-serif; font-weight: 600; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: #9FD8E0; margin-bottom: 14px;">{pageContent.eyebrow}</div>
+      <h1 style="margin: 0 0 18px; font-family: 'Inter Tight', sans-serif; font-weight: 700; font-size: clamp(38px, 6vw, 84px); line-height: 1.02; letter-spacing: -0.02em; color: #BFF7F7;">{pageContent.title}</h1>
+      <p style="margin: 0; max-width: 620px; font-size: clamp(16px, 1.6vw, 19px); line-height: 1.6; color: #DCEAFF;">{pageContent.description}</p>
     </section>
 
     <section style="max-width: 1240px; margin: 0 auto; padding: 0 6vw clamp(50px, 6vw, 80px);">
       <div style="display: flex; flex-wrap: wrap; gap: 18px; max-width: 900px;">
-        <a href="mailto:lustrumalbertus26@gmail.com" style="flex: 1 1 260px; display: flex; align-items: center; gap: 16px; padding: 22px; border-radius: 16px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); text-decoration: none;">
+        <a href={`mailto:${site.contactEmail}`} style="flex: 1 1 260px; display: flex; align-items: center; gap: 16px; padding: 22px; border-radius: 16px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); text-decoration: none;">
           <i class="ph ph-envelope-simple" style="font-size: 26px; color: #BFF7F7;"></i>
           <div>
             <div style="font-family: 'Inter Tight', sans-serif; font-weight: 600; color: #FFFFFF; margin-bottom: 2px;">E-mail</div>
-            <div style="font-size: 15px; color: #DCEAFF;">lustrumalbertus26@gmail.com</div>
+            <div style="font-size: 15px; color: #DCEAFF;">{site.contactEmail}</div>
           </div>
         </a>
-        <a href="https://www.instagram.com/lustrumalbertus/" target="_blank" rel="noopener" style="flex: 1 1 260px; display: flex; align-items: center; gap: 16px; padding: 22px; border-radius: 16px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); text-decoration: none;">
+        <a href={site.instagramUrl} target="_blank" rel="noopener" style="flex: 1 1 260px; display: flex; align-items: center; gap: 16px; padding: 22px; border-radius: 16px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); text-decoration: none;">
           <i class="ph ph-instagram-logo" style="font-size: 26px; color: #BFF7F7;"></i>
           <div>
             <div style="font-family: 'Inter Tight', sans-serif; font-weight: 600; color: #FFFFFF; margin-bottom: 2px;">Instagram</div>
-            <div style="font-size: 15px; color: #DCEAFF;">@lustrumalbertus</div>
+            <div style="font-size: 15px; color: #DCEAFF;">{site.instagramHandle}</div>
           </div>
         </a>
       </div>

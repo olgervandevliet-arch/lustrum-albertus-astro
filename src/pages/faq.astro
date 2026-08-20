@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { faqs } from '../data/faq.json';
+import { faq as pageContent } from '../data/pages.json';
 ---
 
 <BaseLayout
@@ -24,9 +25,9 @@ import { faqs } from '../data/faq.json';
     <Header />
 
     <section style="max-width: 1240px; margin: 0 auto; padding: clamp(150px, 16vw, 200px) 6vw clamp(50px, 6vw, 80px);">
-      <div style="font-family: 'Inter Tight', sans-serif; font-weight: 600; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: #9FD8E0; margin-bottom: 14px;">Vragen &amp; antwoorden</div>
-      <h1 style="margin: 0 0 18px; font-family: 'Inter Tight', sans-serif; font-weight: 700; font-size: clamp(38px, 6vw, 84px); line-height: 1.02; letter-spacing: -0.02em; color: #BFF7F7;">Veelgestelde vragen</h1>
-      <p style="margin: 0; max-width: 620px; font-size: clamp(16px, 1.6vw, 19px); line-height: 1.6; color: #DCEAFF;">Staat je vraag er niet bij? Neem contact op met de lustrumcommissie.</p>
+      <div style="font-family: 'Inter Tight', sans-serif; font-weight: 600; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: #9FD8E0; margin-bottom: 14px;">{pageContent.eyebrow}</div>
+      <h1 style="margin: 0 0 18px; font-family: 'Inter Tight', sans-serif; font-weight: 700; font-size: clamp(38px, 6vw, 84px); line-height: 1.02; letter-spacing: -0.02em; color: #BFF7F7;">{pageContent.title}</h1>
+      <p style="margin: 0; max-width: 620px; font-size: clamp(16px, 1.6vw, 19px); line-height: 1.6; color: #DCEAFF;">{pageContent.description}</p>
     </section>
 
     <section style="max-width: 1240px; margin: 0 auto; padding: 0 6vw clamp(80px, 9vw, 130px);">

@@ -12,6 +12,87 @@ media_folder: "public/uploads"
 public_folder: "/uploads"
 
 collections:
+  - name: "site"
+    label: "Site-instellingen"
+    files:
+      - name: "site"
+        label: "Algemeen"
+        file: "src/data/site.json"
+        fields:
+          - { label: "Tekst mededelingenbalk", name: "announcementText", widget: "string" }
+          - { label: "Link-tekst mededelingenbalk", name: "announcementLinkText", widget: "string" }
+          - { label: "Instagram URL", name: "instagramUrl", widget: "string" }
+          - { label: "Instagram gebruikersnaam (bijv. @lustrumalbertus)", name: "instagramHandle", widget: "string" }
+          - { label: "Contact e-mailadres", name: "contactEmail", widget: "string" }
+          - { label: "Copyright-tekst footer", name: "footerCopyright", widget: "string" }
+          - label: "Countdown datum/tijd"
+            name: "countdownTargetDate"
+            widget: "string"
+            hint: "Exact formaat: JJJJ-MM-DDTUU:MM:SS, bijv. 2027-08-18T20:00:00"
+
+  - name: "pages"
+    label: "Paginateksten"
+    files:
+      - name: "pages"
+        label: "Introteksten per pagina"
+        file: "src/data/pages.json"
+        fields:
+          - label: "Spaarpakketten"
+            name: "pakketten"
+            widget: "object"
+            fields:
+              - { label: "Eyebrow", name: "eyebrow", widget: "string" }
+              - { label: "Titel", name: "title", widget: "string" }
+              - { label: "Beschrijving", name: "description", widget: "text" }
+          - label: "Partners & sponsoren"
+            name: "partners"
+            widget: "object"
+            fields:
+              - { label: "Eyebrow", name: "eyebrow", widget: "string" }
+              - { label: "Titel", name: "title", widget: "string" }
+              - { label: "Beschrijving", name: "description", widget: "text" }
+          - label: "FAQ"
+            name: "faq"
+            widget: "object"
+            fields:
+              - { label: "Eyebrow", name: "eyebrow", widget: "string" }
+              - { label: "Titel", name: "title", widget: "string" }
+              - { label: "Beschrijving", name: "description", widget: "text" }
+          - label: "Contact"
+            name: "contact"
+            widget: "object"
+            fields:
+              - { label: "Eyebrow", name: "eyebrow", widget: "string" }
+              - { label: "Titel", name: "title", widget: "string" }
+              - { label: "Beschrijving", name: "description", widget: "text" }
+          - label: "Kleuren"
+            name: "kleuren"
+            widget: "object"
+            fields:
+              - { label: "Titel", name: "title", widget: "string" }
+              - { label: "Beschrijving", name: "description", widget: "text" }
+
+  - name: "colors"
+    label: "Kleuren"
+    files:
+      - name: "colors"
+        label: "Lustrumkleuren"
+        file: "src/data/colors.json"
+        fields:
+          - label: "Kleuren"
+            name: "colors"
+            widget: "list"
+            summary: "{{fields.name}} — {{fields.hex}}"
+            fields:
+              - { label: "Naam", name: "name", widget: "string" }
+              - { label: "HEX", name: "hex", widget: "color", enableAlpha: false }
+              - { label: "Tekstkleur op deze achtergrond (HEX)", name: "onHex", widget: "color", enableAlpha: false }
+              - { label: "RGB", name: "rgb", widget: "string" }
+              - { label: "CMYK", name: "cmyk", widget: "string" }
+              - { label: "Pantone", name: "pantone", widget: "string" }
+              - { label: "RAL", name: "ral", widget: "string" }
+              - { label: "Link naar verf", name: "url", widget: "string" }
+
   - name: "board"
     label: "Bestuursleden"
     files:

@@ -1,4 +1,6 @@
 ---
+import site from '../data/site.json';
+
 export interface Props {
   showAnnouncement?: boolean;
 }
@@ -37,8 +39,8 @@ const mobileItems = [
 <div data-header-root style="font-family: 'Inter', system-ui, sans-serif;">
   {showAnnouncement && (
     <div data-bar style="position: relative; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px 8px; background: #3B4C99; color: #FFFFFF; font-size: clamp(12px, 3vw, 14px); font-weight: 500; letter-spacing: 0.005em; padding: 12px clamp(40px, 10vw, 56px); text-align: center; border-bottom: 1px solid #677BC0">
-      <span>Volg ons op Instagram voor de laatste updates.</span>
-      <a href="https://www.instagram.com/lustrumalbertus/" target="_blank" rel="noopener" style="color: #FFFFFF; text-decoration: underline; text-underline-offset: 3px; font-weight: 500;">Naar instagram &gt;</a>
+      <span>{site.announcementText}</span>
+      <a href={site.instagramUrl} target="_blank" rel="noopener" style="color: #FFFFFF; text-decoration: underline; text-underline-offset: 3px; font-weight: 500;">{site.announcementLinkText}</a>
       <button type="button" data-bar-close class="header-bar-close" aria-label="Sluiten" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); width: 26px; height: 26px; display: grid; place-items: center; background: transparent; border: 0; cursor: pointer; color: #DCEAFF; font-size: 18px; line-height: 1; padding: 0;">
         <i class="ph ph-x"></i>
       </button>
@@ -58,7 +60,7 @@ const mobileItems = [
           <a href="/partners" class="header-nav-link" style="color: #FFFFFF; text-decoration: none; font-size: clamp(12px, 2.2vw, 14px); font-weight: 500; padding: 7px 12px; margin: -7px -12px; border-radius: 8px; transition: background 0.15s ease;">Partners</a>
           <a href="/faq" class="header-nav-link" style="color: #FFFFFF; text-decoration: none; font-size: clamp(12px, 2.2vw, 14px); font-weight: 500; padding: 7px 12px; margin: -7px -12px; border-radius: 8px; transition: background 0.15s ease;">FAQ</a>
           <a href="/contact" class="header-nav-link" style="color: #FFFFFF; text-decoration: none; font-size: clamp(12px, 2.2vw, 14px); font-weight: 500; padding: 7px 12px; margin: -7px -12px; border-radius: 8px; transition: background 0.15s ease;">Contact</a>
-          <a href="https://www.instagram.com/lustrumalbertus/" target="_blank" rel="noopener" aria-label="Instagram" class="header-nav-instagram" style="display: grid; place-items: center; width: 26px; height: 26px; color: #FFFFFF; flex: 0 0 auto; font-size: 20px; text-decoration: none;">
+          <a href={site.instagramUrl} target="_blank" rel="noopener" aria-label="Instagram" class="header-nav-instagram" style="display: grid; place-items: center; width: 26px; height: 26px; color: #FFFFFF; flex: 0 0 auto; font-size: 20px; text-decoration: none;">
             <i class="ph ph-instagram-logo"></i>
           </a>
         </nav>
@@ -91,7 +93,7 @@ const mobileItems = [
             <i class="ph ph-arrow-right" aria-hidden="true"></i>
           </a>
         ))}
-        <a href="https://www.instagram.com/lustrumalbertus/" target="_blank" rel="noopener" class="header-mobile-link" style="display: flex; align-items: center; gap: 10px; padding: 18px clamp(28px, 7vw, 40px) 22px clamp(24px, 6vw, 34px); color: #FFFFFF; text-decoration: none; font-family: 'Inter Tight', sans-serif; font-size: clamp(16px, 4.2vw, 19px); font-weight: 500;">
+        <a href={site.instagramUrl} target="_blank" rel="noopener" class="header-mobile-link" style="display: flex; align-items: center; gap: 10px; padding: 18px clamp(28px, 7vw, 40px) 22px clamp(24px, 6vw, 34px); color: #FFFFFF; text-decoration: none; font-family: 'Inter Tight', sans-serif; font-size: clamp(16px, 4.2vw, 19px); font-weight: 500;">
           <i class="ph-bold ph-instagram-logo"></i>
           <span>Volg ons op Instagram</span>
         </a>
