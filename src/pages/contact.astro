@@ -2,22 +2,12 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-
-const board = [
-  { name: 'Chloé Groeneveld', role: 'Praeses', photo: '/uploads/Chloe.jpg' },
-  { name: 'Frédérique Leenman', role: 'Abactis', photo: '/uploads/Frederique.jpg' },
-  { name: 'Rens Loos', role: 'Fiscus 1', photo: '/uploads/Rens.jpg' },
-  { name: 'Floris Bijma', role: 'Fiscus 2', photo: '/uploads/Floris.png' },
-  { name: 'Nick Snoeren', role: 'Fiscus 3', photo: '/uploads/Nick.jpg' },
-  { name: 'Bas Sauer', role: 'Vice-Praeses', photo: '/uploads/Bas.jpg' },
-  { name: 'Julia Buning', role: 'Assesor', photo: '/uploads/Julia.jpg' },
-  { name: 'Noor Leeuwenburgh', role: 'Procurator', photo: '/uploads/Noor.jpg' },
-];
+import { board } from '../data/board.json';
 ---
 
 <BaseLayout
   title="Contact — Lustrum Albertus Magnus XXVI"
-  description="Neem contact op met de lustrumcommissie van Albertus Magnus voor vragen over het lustrum, sponsoring of de commissies."
+  description="Neem contact op met de lustrumcommissie van Lustrum Albertus Magnus XXVI voor vragen over het lustrum, sponsoring of de commissies."
   path="/contact"
 >
   <Fragment slot="head">
@@ -63,7 +53,7 @@ const board = [
         {board.map((p) => (
           <div style="padding: 12px 12px 14px; border-radius: 14px; background: rgba(103,123,192,0.16); border: 1px solid rgba(103,123,192,0.4);">
             <div style="width: 100%; aspect-ratio: 1; margin-bottom: 10px; border-radius: 8px; overflow: hidden;">
-              <img src={p.photo} alt={p.name} style="width: 100%; height: 100%; object-fit: cover; object-position: center 15%; transform: scale(1.6); transform-origin: center 18%; display: block;" />
+              <img src={p.photo} alt={`${p.name}, ${p.role} van het lustrumbestuur`} loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover; object-position: center 15%; transform: scale(1.6); transform-origin: center 18%; display: block;" />
             </div>
             <div style="font-family: 'Inter Tight', sans-serif; font-weight: 600; color: #FFFFFF; font-size: 16px;">{p.name}</div>
             <div style="font-size: 14px; color: #9FD8E0;">{p.role}</div>

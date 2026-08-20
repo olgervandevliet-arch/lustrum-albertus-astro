@@ -6,5 +6,9 @@ const SITE_URL = 'https://lustrum-albertus-astro.vercel.app';
 
 export default defineConfig({
   site: SITE_URL,
+  trailingSlash: 'never',
+  build: {
+    format: 'file',
+  },
   integrations: [sitemap()],
 });

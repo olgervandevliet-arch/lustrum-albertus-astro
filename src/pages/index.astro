@@ -38,8 +38,28 @@ const letters = [
 
 <BaseLayout
   title="Lustrum Albertus Magnus XXVI — Sinds 1896"
-  description="Volg de aftelling naar Lustrum Albertus Magnus XXVI: het 26e lustrum van studentenvereniging Albertus Magnus, augustus 2027. Spaarpakketten, partners en het laatste nieuws."
+  description="Lustrum Albertus Magnus XXVI: het 26e lustrum van studentenvereniging Albertus Magnus, augustus 2027. Countdown, spaarpakketten en het laatste nieuws."
   path="/"
+  breadcrumbLabel={false}
+  structuredData={[
+    {
+      '@type': 'Event',
+      name: 'Lustrum Albertus Magnus XXVI',
+      description:
+        'Het 26e lustrum van studentenvereniging Albertus Magnus: een week vol feesten, activiteiten en tradities.',
+      startDate: '2027-08-18T20:00:00+02:00',
+      eventStatus: 'https://schema.org/EventScheduled',
+      eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+      location: {
+        '@type': 'Place',
+        name: 'Locatie volgt binnenkort',
+        address: { '@type': 'PostalAddress', addressCountry: 'NL' },
+      },
+      organizer: { '@id': new URL('/', Astro.site).toString() + '#organization' },
+      image: [new URL('/uploads/Header.jpg', Astro.site).toString()],
+      url: new URL('/', Astro.site).toString(),
+    },
+  ]}
 >
   <Fragment slot="head">
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" is:inline></script>
@@ -103,7 +123,7 @@ const letters = [
 
         <div data-counter style="position: absolute; left: 50%; bottom: 14vh; transform: translate(-50%, 0); opacity: 1; width: min(1160px, 90vw); will-change: transform;">
           <div style="text-align: center; margin-bottom: clamp(36px, 8vw, 80px);">
-            <div data-hero-title style="font-family: 'Inter Tight', sans-serif; font-weight: 700; font-size: clamp(28px, 3.2vw, 48px); letter-spacing: 0.02em; color: #24356F; overflow: hidden;"><span data-title-word>Lustrum</span><span data-title-break> </span><span data-title-word>Albertus</span><span data-title-break> </span><span data-title-word>XXVI</span></div>
+            <h1 data-hero-title style="margin: 0; font-family: 'Inter Tight', sans-serif; font-weight: 700; font-size: clamp(28px, 3.2vw, 48px); letter-spacing: 0.02em; color: #24356F; overflow: hidden;"><span data-title-word>Lustrum</span><span data-title-break> </span><span data-title-word>Albertus</span><span data-title-break> </span><span data-title-word>XXVI</span></h1>
           </div>
           <div data-counter-glass>
             <div data-countdown-grid style="display: flex; align-items: flex-start; justify-content: center; flex-wrap: wrap; row-gap: 14px; gap: clamp(4px, 1vw, 14px); position: relative">
@@ -162,7 +182,7 @@ const letters = [
           v.available ? (
             <button type="button" data-video-open={v.embed} style="text-align: left; cursor: pointer; scroll-snap-align: start; flex: 0 0 auto; width: clamp(280px, 26vw, 400px); padding: 12px 12px 6px; border-radius: 14px; background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.14);">
               <div style="position: relative; aspect-ratio: 16 / 9; border-radius: 8px; overflow: hidden; background-color: #6E86C4;">
-                <img src={v.thumbnail} alt={v.title} style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;" />
+                <img src={v.thumbnail} alt={`Video: ${v.title} — Lustrum Albertus Magnus XXVI`} loading="lazy" decoding="async" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;" />
                 <div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 54px; height: 54px; border-radius: 50%; background: #BFF7F7; display: grid; place-items: center; box-shadow: 0 14px 30px -18px rgba(10,20,50,0.7);">
                   <span style="display: block; width: 0; height: 0; margin-left: 4px; border-left: 15px solid #3B4C99; border-top: 10px solid transparent; border-bottom: 10px solid transparent;"></span>
                 </div>

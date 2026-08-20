@@ -1,0 +1,19 @@
+{
+  "partners": [
+    {
+      "name": "Heineken",
+      "desc": "Heineken verzorgt als officiële biersponsor de tap tijdens de lustrumweek.",
+      "src": "/uploads/Heineken.webp"
+    },
+    {
+      "name": "Stelz",
+      "desc": "Stelz verzorgt als partner de sterkedrank tijdens de lustrumweek.",
+      "src": "/uploads/Stelz.webp"
+    },
+    {
+      "name": "Webwavers",
+      "desc": "Webwavers heeft als technisch partner deze website gebouwd.",
+      "src": "/uploads/Webwavers- blauw1.svg"
+    }
+  ]
+}

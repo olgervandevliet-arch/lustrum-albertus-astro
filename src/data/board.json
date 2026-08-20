@@ -1,0 +1,12 @@
+{
+  "board": [
+    { "name": "Chloé Groeneveld", "role": "Praeses", "photo": "/uploads/Chloe.webp" },
+    { "name": "Frédérique Leenman", "role": "Abactis", "photo": "/uploads/Frederique.webp" },
+    { "name": "Rens Loos", "role": "Fiscus 1", "photo": "/uploads/Rens.webp" },
+    { "name": "Floris Bijma", "role": "Fiscus 2", "photo": "/uploads/Floris.webp" },
+    { "name": "Nick Snoeren", "role": "Fiscus 3", "photo": "/uploads/Nick.webp" },
+    { "name": "Bas Sauer", "role": "Vice-Praeses", "photo": "/uploads/Bas.webp" },
+    { "name": "Julia Buning", "role": "Assesor", "photo": "/uploads/Julia.webp" },
+    { "name": "Noor Leeuwenburgh", "role": "Procurator", "photo": "/uploads/Noor.webp" }
+  ]
+}

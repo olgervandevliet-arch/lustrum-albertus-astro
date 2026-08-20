@@ -1,0 +1,51 @@
+{
+  "packages": [
+    {
+      "name": "Bierbedelaar",
+      "price": "850",
+      "m11": "77,27",
+      "m10": "85,00",
+      "features": [
+        "Passe-partout met 15% korting",
+        "150 munten",
+        "€0,05 korting per munt",
+        "Lustrumgadgetpakket t.w.v. ca. €40"
+      ]
+    },
+    {
+      "name": "Muntenraper",
+      "price": "1.075",
+      "m11": "97,73",
+      "m10": "107,50",
+      "features": [
+        "Passe-partout met 15% korting",
+        "250 munten",
+        "€0,15 korting per munt",
+        "Lustrumgadgetpakket t.w.v. ca. €55"
+      ]
+    },
+    {
+      "name": "Prinspils",
+      "price": "1.250",
+      "m11": "113,64",
+      "m10": "125,00",
+      "features": [
+        "Passe-partout met 15% korting",
+        "400 munten",
+        "€0,25 korting per munt",
+        "Lustrumgadgetpakket t.w.v. ca. €65"
+      ]
+    },
+    {
+      "name": "Ouderejaarspakket",
+      "price": "450",
+      "m11": "40,91",
+      "m10": "45,00",
+      "features": [
+        "Toegang tot Openingsfeest, Clubdag en Seniorendag + 3 lustrumdagen naar keuze (excl. Chiquedag en Geheimedag)",
+        "100 munten",
+        "Lustrumgadgetpakket t.w.v. ca. €25"
+      ]
+    }
+  ]
+}

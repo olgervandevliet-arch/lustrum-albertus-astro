@@ -2,12 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-
-const partners = [
-  { name: 'Heineken', desc: 'Heineken verzorgt als officiële biersponsor de tap tijdens de lustrumweek.', src: '/uploads/2017-06-28_10-29-12.png' },
-  { name: 'Stelz', desc: 'Stelz verzorgt als partner de sterkedrank tijdens de lustrumweek.', src: '/uploads/Stelz_Hard_drinks_logo_Main_9866ecfd-40ab-4e05-bf3f-3a5d23247571_1280x.png.webp' },
-  { name: 'Webwavers', desc: 'Webwavers heeft als technisch partner deze website gebouwd.', src: '/uploads/Webwavers- blauw1.svg' },
-];
+import { partners } from '../data/partners.json';
 ---
 
 <BaseLayout
@@ -29,7 +24,7 @@ const partners = [
         {partners.map((p) => (
           <div style="border-radius: 16px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); overflow: hidden;">
             <div style="background: #FFFFFF; padding: 28px; display: flex; align-items: center; justify-content: center; height: 120px;">
-              <img src={p.src} alt={p.name} style="width: 100%; height: 100%; object-fit: contain;" />
+              <img src={p.src} alt={`${p.name} — partner van Lustrum Albertus Magnus XXVI`} loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: contain;" />
             </div>
             <div style="padding: 18px 20px 22px;">
               <div style="font-family: 'Inter Tight', sans-serif; font-weight: 600; font-size: 18px; color: #FFFFFF; margin-bottom: 6px;">{p.name}</div>

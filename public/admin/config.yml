@@ -1,0 +1,81 @@
+backend:
+  name: github
+  repo: olgervandevliet-arch/lustrum-albertus-astro
+  branch: main
+  base_url: https://lustrum-albertus-astro.vercel.app
+  auth_endpoint: api/auth
+
+site_url: https://lustrum-albertus-astro.vercel.app
+logo_url: /uploads/AM-lustrum-fav.png
+
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+collections:
+  - name: "board"
+    label: "Bestuursleden"
+    files:
+      - name: "board"
+        label: "Lustrumbestuur"
+        file: "src/data/board.json"
+        fields:
+          - label: "Bestuursleden"
+            name: "board"
+            widget: "list"
+            summary: "{{fields.name}} — {{fields.role}}"
+            fields:
+              - { label: "Naam", name: "name", widget: "string" }
+              - { label: "Functie", name: "role", widget: "string" }
+              - { label: "Foto", name: "photo", widget: "image" }
+
+  - name: "packages"
+    label: "Spaarpakketten"
+    files:
+      - name: "packages"
+        label: "Spaarpakketten"
+        file: "src/data/packages.json"
+        fields:
+          - label: "Pakketten"
+            name: "packages"
+            widget: "list"
+            summary: "{{fields.name}} — €{{fields.price}}"
+            fields:
+              - { label: "Naam", name: "name", widget: "string" }
+              - { label: "Totaalprijs (bijv. 850 of 1.075)", name: "price", widget: "string" }
+              - { label: "Bedrag per maand bij 11 termijnen", name: "m11", widget: "string" }
+              - { label: "Bedrag per maand bij 10 termijnen", name: "m10", widget: "string" }
+              - label: "Kenmerken"
+                name: "features"
+                widget: "list"
+                field: { label: "Kenmerk", name: "feature", widget: "string" }
+
+  - name: "partners"
+    label: "Partners & sponsoren"
+    files:
+      - name: "partners"
+        label: "Partners"
+        file: "src/data/partners.json"
+        fields:
+          - label: "Partners"
+            name: "partners"
+            widget: "list"
+            summary: "{{fields.name}}"
+            fields:
+              - { label: "Naam", name: "name", widget: "string" }
+              - { label: "Beschrijving", name: "desc", widget: "text" }
+              - { label: "Logo", name: "src", widget: "image" }
+
+  - name: "faq"
+    label: "Veelgestelde vragen"
+    files:
+      - name: "faq"
+        label: "FAQ"
+        file: "src/data/faq.json"
+        fields:
+          - label: "Vragen"
+            name: "faqs"
+            widget: "list"
+            summary: "{{fields.q}}"
+            fields:
+              - { label: "Vraag", name: "q", widget: "string" }
+              - { label: "Antwoord", name: "a", widget: "text" }
