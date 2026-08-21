@@ -75,6 +75,9 @@ const letters = [
         [data-letter="U2"] { font-size: 50vw !important; left: 54vw !important; top: 34vh !important; }
         [data-letter="L"] { font-size: 64vw !important; left: -10vw !important; top: 40vh !important; }
       }
+      @media (min-width: 981px) {
+        [data-counter] { bottom: calc(14vh - 32px) !important; }
+      }
     </style>
   </Fragment>
 
@@ -166,7 +169,7 @@ const letters = [
       </div>
     </section>
 
-    <section style="position: relative; background: #4557A4; padding: clamp(70px, 9vw, 130px) 0 clamp(60px, 7vw, 110px);">
+    <section style="position: relative; background: #4557A4; padding: clamp(70px, 9vw, 130px) 0;">
       <div style="max-width: 1240px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 6vw; margin-bottom: clamp(34px, 4vw, 60px);">
         <h2 data-title-reveal style="margin: 0; font-family: 'Inter Tight', sans-serif; font-weight: 700; font-size: clamp(44px, 7vw, 104px); line-height: 1; letter-spacing: -0.025em; color: #BFF7F7;">Laatste video's</h2>
         <div style="display: flex; gap: 10px; flex: 0 0 auto;">

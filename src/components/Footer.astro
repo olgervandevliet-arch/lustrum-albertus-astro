@@ -10,13 +10,15 @@ import site from '../data/site.json';
 </style>
 
 <footer style="position: relative; background: #4557A4; font-family: 'Inter', system-ui, sans-serif; color: #E6F4FF; overflow: hidden; border-top: 1px solid rgba(255,255,255,0.22);">
-  <div style="position: relative; max-width: 1240px; margin: 0 auto; width: 100%; aspect-ratio: 1200 / 320; padding: 0 6vw; overflow: hidden;">
-    <svg viewBox="0 0 1200 320" style="display: block; width: 100%; height: 100%;">
-      <path d="M1200 -36V367.065H1126.96V-36H1200Z" fill="#BFF7F7"></path>
-      <path d="M800.723 -36L905.412 281.041H909.74L1014.43 -36H1094.5L952.481 367.065H862.671L720.381 -36H800.723Z" fill="#BFF7F7"></path>
-      <path d="M446.348 -36L535.076 111.7H538.323L627.321 -36H710.639L586.474 165.803L712.533 367.065H628.133L538.323 220.446H535.076L445.266 367.065H361.407L488.548 165.803L363.03 -36H446.348Z" fill="#BFF7F7"></path>
-      <path d="M84.9411 -36L173.669 111.7H176.916L265.914 -36H349.232L225.067 165.803L351.126 367.065H266.726L176.916 220.446H173.669L83.8591 367.065H0L127.141 165.803L1.62308 -36H84.9411Z" fill="#BFF7F7"></path>
-    </svg>
+  <div style="width: 100%; padding: 0 max(6vw, calc((100vw - 1240px) / 2)); box-sizing: border-box;">
+    <div style="position: relative; width: 100%; aspect-ratio: 1200 / 404; overflow: hidden;">
+      <svg data-footer-mark viewBox="0 -36 1200 404" style="display: block; width: 100%; height: 100%;">
+        <path data-footer-letter d="M1200 -36V367.065H1126.96V-36H1200Z" fill="#BFF7F7" style="transform: translateY(-420px);"></path>
+        <path data-footer-letter d="M800.723 -36L905.412 281.041H909.74L1014.43 -36H1094.5L952.481 367.065H862.671L720.381 -36H800.723Z" fill="#BFF7F7" style="transform: translateY(-420px);"></path>
+        <path data-footer-letter d="M446.348 -36L535.076 111.7H538.323L627.321 -36H710.639L586.474 165.803L712.533 367.065H628.133L538.323 220.446H535.076L445.266 367.065H361.407L488.548 165.803L363.03 -36H446.348Z" fill="#BFF7F7" style="transform: translateY(-420px);"></path>
+        <path data-footer-letter d="M84.9411 -36L173.669 111.7H176.916L265.914 -36H349.232L225.067 165.803L351.126 367.065H266.726L176.916 220.446H173.669L83.8591 367.065H0L127.141 165.803L1.62308 -36H84.9411Z" fill="#BFF7F7" style="transform: translateY(-420px);"></path>
+      </svg>
+    </div>
   </div>
   <div style="border-top: 1px solid rgba(255,255,255,0.22);">
     <div style="max-width: 1240px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; padding: 22px 6vw 26px; font-size: 15px; font-weight: 500; padding-top: 40px; padding-bottom: 40px">
@@ -28,3 +30,55 @@ import site from '../data/site.json';
     </div>
   </div>
 </footer>
+
+<script>
+  function initFooterMark(svg: SVGSVGElement) {
+    const letters = Array.from(svg.querySelectorAll<SVGPathElement>('[data-footer-letter]'));
+    if (!letters.length) return;
+    letters.sort((a, b) => a.getBBox().x - b.getBBox().x);
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) {
+      letters.forEach((el) => { el.style.transform = 'translateY(0)'; });
+      return;
+    }
+
+    const HIDDEN_Y = -420;
+
+    const runGsap = (fn: () => void) => {
+      const gsap = (window as any).gsap;
+      if (!gsap) { setTimeout(() => runGsap(fn), 50); return; }
+      fn();
+    };
+
+    const reveal = () => runGsap(() => {
+      const gsap = (window as any).gsap;
+      gsap.to(letters, {
+        y: 0,
+        duration: 0.85,
+        ease: 'power3.out',
+        stagger: 0.12,
+      });
+    });
+
+    const hide = () => runGsap(() => {
+      const gsap = (window as any).gsap;
+      gsap.to(letters, {
+        y: HIDDEN_Y,
+        duration: 0.6,
+        ease: 'power2.in',
+        stagger: 0.06,
+      });
+    });
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) reveal();
+        else hide();
+      });
+    }, { threshold: 0.25 });
+    io.observe(svg);
+  }
+
+  document.querySelectorAll<SVGSVGElement>('[data-footer-mark]').forEach(initFooterMark);
+</script>

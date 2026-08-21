@@ -132,7 +132,7 @@
           gsap.killTweensOf(split.chars);
           gsap.to(split.chars, { opacity: 0, yPercent: 120, duration: 0.2, stagger: 0.01, ease: 'power1.in' });
         };
-        window.ScrollTrigger.create({ trigger: el, start: 'top 85%', end: 'top 85%', onEnter: play, onLeaveBack: reset });
+        window.ScrollTrigger.create({ trigger: el, start: 'top 110%', end: 'top 110%', onEnter: play, onLeaveBack: reset });
       });
     };
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(setup);
@@ -348,13 +348,13 @@
       tl.to(el, { yPercent: -(160 + speed * 480), scale: 1 + speed * 0.35, ease: 'none' }, 0);
       tl.to(el, { x: () => window.innerWidth * dx * 1.6, rotate: rot + (dx >= 0 ? 13 : -12), ease: 'power1.in' }, 0.22);
     });
+    const isMobileLayout = window.matchMedia('(max-width: 980px)').matches;
+
     // the counter is free to drift down (even past the dark section) — the TV
     // is positioned independently below so it always ends up centered
     const counterStartRect = counter.getBoundingClientRect();
-    const counterTargetY = window.innerHeight - counterStartRect.top + 40;
+    const counterTargetY = window.innerHeight - counterStartRect.top + (isMobileLayout ? window.innerHeight * 0.35 : 56);
     tl.to(counter, { y: counterTargetY, ease: 'none' }, 0);
-
-    const isMobileLayout = window.matchMedia('(max-width: 980px)').matches;
     const tvWrap = document.querySelector('[data-tv-wrap]');
     const glassBox = document.querySelector('[data-counter-glass]');
     if (tvWrap) {
@@ -391,6 +391,35 @@
       const finalCenterBeforeOwnY = tvBottomFixed - finalTvHeight / 2 + counterTargetY;
       const targetY = window.innerHeight / 2 - finalCenterBeforeOwnY;
       tl.to(tvWrap, { scale: targetScale, x: targetX, y: targetY, duration: 0.8, ease: 'none' }, 0);
+
+      // the TV settles centered first (unchanged, same as above) — only once
+      // that's done does continued scrolling bring the dark blue section up
+      // to meet its resting bottom edge, so it ends up standing on it
+      const nextSection = wrap.nextElementSibling;
+      if (nextSection) {
+        const tvBottomFinal = window.innerHeight / 2 + finalTvHeight / 2;
+        // small overlap so the section always meets the TV flush, even with
+        // sub-pixel/measurement rounding — never leaves a visible gap
+        const riseAmount = window.innerHeight - tvBottomFinal + 45;
+        // the rise itself is a transform (cheap, no layout thrashing while
+        // scrolling) — once it's fully complete/reversed, swap the same
+        // visual offset over to a real margin so the document flow (and
+        // whatever follows, like the footer) closes up too, leaving nothing
+        // "stuck" as a lingering transform once you scroll past this point
+        gsap.set(nextSection, { position: 'relative', zIndex: 2 });
+        tl.fromTo(
+          nextSection,
+          { y: 0 },
+          {
+            y: -riseAmount,
+            duration: 0.8,
+            ease: 'none',
+            onComplete: () => gsap.set(nextSection, { marginTop: -riseAmount, y: 0 }),
+            onReverseComplete: () => gsap.set(nextSection, { marginTop: 0, y: 0 }),
+          },
+          0.8
+        );
+      }
     }
 
     const title = document.querySelector('[data-hero-title]');

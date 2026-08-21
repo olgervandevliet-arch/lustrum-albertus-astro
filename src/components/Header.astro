@@ -260,6 +260,10 @@ const mobileItems = [
     navEl.style.width = initialWidth + 'px';
 
     menuToggle.addEventListener('click', () => {
+      // on desktop the pill only opens on hover — the toggle button there is
+      // just a visual echo of that state, not an independent click target,
+      // otherwise it can get "stuck" open with the mouse nowhere near it
+      if (!isMobile()) return;
       state.open = !state.open;
       render();
       animate();
