@@ -391,45 +391,6 @@
       const finalCenterBeforeOwnY = tvBottomFixed - finalTvHeight / 2 + counterTargetY;
       const targetY = window.innerHeight / 2 - finalCenterBeforeOwnY;
       tl.to(tvWrap, { scale: targetScale, x: targetX, y: targetY, duration: 0.8, ease: 'none' }, 0);
-
-      // the TV settles centered first (unchanged, same as above) — only once
-      // that's done does continued scrolling bring the dark blue section up
-      // to meet its resting bottom edge, so it ends up standing on it
-      const nextSection = wrap.nextElementSibling;
-      if (nextSection) {
-        const tvBottomFinal = window.innerHeight / 2 + finalTvHeight / 2;
-        // small overlap so the section always meets the TV flush, even with
-        // sub-pixel/measurement rounding — never leaves a visible gap
-        const riseAmount = window.innerHeight - tvBottomFinal + 45;
-        gsap.set(nextSection, { position: 'relative', zIndex: 2 });
-
-        // driven directly off scroll progress (not a scrubbed tween inside
-        // `tl`) so it can be fully released once we scroll past the pin —
-        // a scrubbed tween keeps re-rendering its frozen end value forever,
-        // which would leave this section's top permanently hidden behind
-        // the (by-then unpinned, but still visible) TV panel above it
-        const revealST = window.ScrollTrigger.create({
-          trigger: wrap,
-          start: 'top top',
-          end: 'bottom bottom',
-          onUpdate: (self) => {
-            const revealProgress = Math.max(0, Math.min(1, (self.progress - 0.5) / 0.5));
-            gsap.set(nextSection, { y: -riseAmount * revealProgress });
-          },
-        });
-        // separate, later trigger purely to release the lift once we've
-        // scrolled well past the flush moment — kept apart from the trigger
-        // above so it doesn't fire (and undo the lift) at that exact instant;
-        // a plain pixel end (derived from the trigger above, once resolved)
-        // avoids any ambiguity in GSAP's relative-offset position syntax
-        window.ScrollTrigger.create({
-          trigger: wrap,
-          start: 'top top',
-          end: () => revealST.end + window.innerHeight * 0.3,
-          onLeave: () => gsap.set(nextSection, { y: 0 }),
-          onEnterBack: () => gsap.set(nextSection, { y: -riseAmount }),
-        });
-      }
     }
 
     const title = document.querySelector('[data-hero-title]');
