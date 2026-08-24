@@ -401,24 +401,34 @@
         // small overlap so the section always meets the TV flush, even with
         // sub-pixel/measurement rounding — never leaves a visible gap
         const riseAmount = window.innerHeight - tvBottomFinal + 45;
-        // the rise itself is a transform (cheap, no layout thrashing while
-        // scrolling) — once it's fully complete/reversed, swap the same
-        // visual offset over to a real margin so the document flow (and
-        // whatever follows, like the footer) closes up too, leaving nothing
-        // "stuck" as a lingering transform once you scroll past this point
         gsap.set(nextSection, { position: 'relative', zIndex: 2 });
-        tl.fromTo(
-          nextSection,
-          { y: 0 },
-          {
-            y: -riseAmount,
-            duration: 0.8,
-            ease: 'none',
-            onComplete: () => gsap.set(nextSection, { marginTop: -riseAmount, y: 0 }),
-            onReverseComplete: () => gsap.set(nextSection, { marginTop: 0, y: 0 }),
+
+        // driven directly off scroll progress (not a scrubbed tween inside
+        // `tl`) so it can be fully released once we scroll past the pin —
+        // a scrubbed tween keeps re-rendering its frozen end value forever,
+        // which would leave this section's top permanently hidden behind
+        // the (by-then unpinned, but still visible) TV panel above it
+        const revealST = window.ScrollTrigger.create({
+          trigger: wrap,
+          start: 'top top',
+          end: 'bottom bottom',
+          onUpdate: (self) => {
+            const revealProgress = Math.max(0, Math.min(1, (self.progress - 0.5) / 0.5));
+            gsap.set(nextSection, { y: -riseAmount * revealProgress });
           },
-          0.8
-        );
+        });
+        // separate, later trigger purely to release the lift once we've
+        // scrolled well past the flush moment — kept apart from the trigger
+        // above so it doesn't fire (and undo the lift) at that exact instant;
+        // a plain pixel end (derived from the trigger above, once resolved)
+        // avoids any ambiguity in GSAP's relative-offset position syntax
+        window.ScrollTrigger.create({
+          trigger: wrap,
+          start: 'top top',
+          end: () => revealST.end + window.innerHeight * 0.3,
+          onLeave: () => gsap.set(nextSection, { y: 0 }),
+          onEnterBack: () => gsap.set(nextSection, { y: -riseAmount }),
+        });
       }
     }
 
