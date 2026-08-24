@@ -4,7 +4,7 @@
   "description": "Vragen over het lustrum, sponsoring of een van de commissies? De lustrumcommissie helpt je graag verder.",
   "board": [
     { "name": "Chloé Groeneveld", "role": "Praeses", "photo": "/uploads/Chloe.webp" },
-    { "name": "Frédérique Leenman", "role": "Abactis", "photo": "/uploads/Frederique.webp" },
+    { "name": "Frédérique Leeman", "role": "Abactis", "photo": "/uploads/Frederique.webp" },
     { "name": "Rens Loos", "role": "Fiscus 1", "photo": "/uploads/Rens.webp" },
     { "name": "Floris Bijma", "role": "Fiscus 2", "photo": "/uploads/Floris.webp" },
     { "name": "Nick Snoeren", "role": "Fiscus 3", "photo": "/uploads/Nick.webp" },

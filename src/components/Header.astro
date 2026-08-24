@@ -269,30 +269,33 @@ const mobileItems = [
       animate();
     });
 
-    navEl.addEventListener('mouseenter', () => {
-      if (isMobile() || state.open) return;
-      state.open = true;
-      render();
-      animate();
-    });
-    navEl.addEventListener('mouseleave', () => {
-      if (isMobile() || !state.open) return;
-      state.open = false;
-      render();
-      animate();
-    });
+    // hovering navEl, the info trigger, or the info dropdown should all keep
+    // the pill open — a short shared delay (instead of closing the instant
+    // any one of them fires mouseleave) covers the small gaps between them,
+    // so it can never get "stuck" open once the mouse has actually left all
+    // three, regardless of which order/combination the mouse moved through
+    let openCloseTimer: ReturnType<typeof setTimeout> | undefined;
+    const openPill = () => {
+      if (isMobile()) return;
+      clearTimeout(openCloseTimer);
+      if (!state.open) { state.open = true; render(); animate(); }
+    };
+    const scheduleClosePill = () => {
+      if (isMobile()) return;
+      clearTimeout(openCloseTimer);
+      openCloseTimer = setTimeout(() => {
+        if (state.open) { state.open = false; render(); animate(); }
+      }, 150);
+    };
 
-    infoTrigger?.addEventListener('mouseenter', () => setInfoOpen(true));
+    navEl.addEventListener('mouseenter', openPill);
+    navEl.addEventListener('mouseleave', scheduleClosePill);
+
+    infoTrigger?.addEventListener('mouseenter', () => { openPill(); setInfoOpen(true); });
     infoTrigger?.addEventListener('mouseleave', () => { clearTimeout(infoCloseTimer); setInfoOpen(false); });
 
-    infoDropdown?.addEventListener('mouseenter', () => {
-      setInfoOpen(true);
-      if (!isMobile()) { state.open = true; render(); animate(); }
-    });
-    infoDropdown?.addEventListener('mouseleave', () => {
-      setInfoOpen(false);
-      if (!isMobile() && state.open) { state.open = false; render(); animate(); }
-    });
+    infoDropdown?.addEventListener('mouseenter', () => { openPill(); setInfoOpen(true); });
+    infoDropdown?.addEventListener('mouseleave', () => { setInfoOpen(false); scheduleClosePill(); });
 
     mobileInfoToggle?.addEventListener('click', () => {
       state.mobileInfoOpen = !state.mobileInfoOpen;
