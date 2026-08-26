@@ -2,7 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import pageContent from '../data/pages/pakketten.json';
+import { getPakkettenPage } from '../lib/sanity-queries';
+const pageContent = await getPakkettenPage();
 const { packages } = pageContent;
 ---
 

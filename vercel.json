@@ -1,4 +1,10 @@
 {
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/admin", "destination": "https://lustrum-albertus-studio.vercel.app/admin" },
+    { "source": "/admin/:path*", "destination": "https://lustrum-albertus-studio.vercel.app/admin/:path*" },
+    { "source": "/static/:path*", "destination": "https://lustrum-albertus-studio.vercel.app/static/:path*" },
+    { "source": "/vendor/:path*", "destination": "https://lustrum-albertus-studio.vercel.app/vendor/:path*" }
+  ]
 }

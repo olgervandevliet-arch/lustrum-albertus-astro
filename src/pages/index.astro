@@ -3,7 +3,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import CountdownFlap from '../components/CountdownFlap.astro';
-import homeContent from '../data/pages/home.json';
+import { getHomePage } from '../lib/sanity-queries';
+import { urlFor } from '../utils/sanity';
+
+const homeContent = await getHomePage();
 
 const TARGET_DATE = homeContent.countdownTargetDate;
 const diff = Math.max(0, Date.parse(TARGET_DATE) - Date.now());
@@ -186,7 +189,7 @@ const letters = [
           v.available ? (
             <button type="button" data-video-open={v.embed} style="text-align: left; cursor: pointer; scroll-snap-align: start; flex: 0 0 auto; width: clamp(280px, 26vw, 400px); padding: 12px 12px 6px; border-radius: 14px; background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.14);">
               <div style="position: relative; aspect-ratio: 16 / 9; border-radius: 8px; overflow: hidden; background-color: #6E86C4;">
-                <img src={v.thumbnail} alt={`Video: ${v.title} — Lustrum Albertus Magnus XXVI`} loading="lazy" decoding="async" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;" />
+                <img src={urlFor(v.thumbnail).width(800).url()} alt={`Video: ${v.title} — Lustrum Albertus Magnus XXVI`} loading="lazy" decoding="async" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;" />
                 <div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 54px; height: 54px; border-radius: 50%; background: #BFF7F7; display: grid; place-items: center; box-shadow: 0 14px 30px -18px rgba(10,20,50,0.7);">
                   <span style="display: block; width: 0; height: 0; margin-left: 4px; border-left: 15px solid #3B4C99; border-top: 10px solid transparent; border-bottom: 10px solid transparent;"></span>
                 </div>

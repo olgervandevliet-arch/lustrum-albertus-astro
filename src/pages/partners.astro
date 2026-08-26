@@ -2,7 +2,9 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import pageContent from '../data/pages/partners.json';
+import { getPartnersPage } from '../lib/sanity-queries';
+import { urlFor } from '../utils/sanity';
+const pageContent = await getPartnersPage();
 const { partners } = pageContent;
 ---
 
@@ -25,7 +27,7 @@ const { partners } = pageContent;
         {partners.map((p) => (
           <div style="border-radius: 16px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); overflow: hidden;">
             <div style="background: #FFFFFF; padding: 28px; display: flex; align-items: center; justify-content: center; height: 120px;">
-              <img src={p.src} alt={`${p.name} — partner van Lustrum Albertus Magnus XXVI`} loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: contain;" />
+              <img src={urlFor(p.src).width(400).url()} alt={`${p.name} — partner van Lustrum Albertus Magnus XXVI`} loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: contain;" />
             </div>
             <div style="padding: 18px 20px 22px;">
               <div style="font-family: 'Inter Tight', sans-serif; font-weight: 600; font-size: 18px; color: #FFFFFF; margin-bottom: 6px;">{p.name}</div>

@@ -3,7 +3,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ComingSoon from '../components/ComingSoon.astro';
-import pageContent from '../data/pages/thema.json';
+import { getThemaPage } from '../lib/sanity-queries';
+const pageContent = await getThemaPage();
 ---
 
 <BaseLayout

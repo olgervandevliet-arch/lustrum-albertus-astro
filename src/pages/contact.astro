@@ -2,8 +2,10 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import site from '../data/site.json';
-import pageContent from '../data/pages/contact.json';
+import { getSiteSettings, getContactPage } from '../lib/sanity-queries';
+import { urlFor } from '../utils/sanity';
+const site = await getSiteSettings();
+const pageContent = await getContactPage();
 const { board } = pageContent;
 ---
 
@@ -55,7 +57,7 @@ const { board } = pageContent;
         {board.map((p) => (
           <div style="padding: 12px 12px 14px; border-radius: 14px; background: rgba(103,123,192,0.16); border: 1px solid rgba(103,123,192,0.4);">
             <div style="width: 100%; aspect-ratio: 1; margin-bottom: 10px; border-radius: 8px; overflow: hidden;">
-              <img src={p.photo} alt={`${p.name}, ${p.role} van het lustrumbestuur`} loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover; object-position: center 15%; transform: scale(1.6); transform-origin: center 18%; display: block;" />
+              <img src={urlFor(p.photo).width(400).height(400).url()} alt={`${p.name}, ${p.role} van het lustrumbestuur`} loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover; object-position: center 15%; transform: scale(1.6); transform-origin: center 18%; display: block;" />
             </div>
             <div style="font-family: 'Inter Tight', sans-serif; font-weight: 600; color: #FFFFFF; font-size: 16px;">{p.name}</div>
             <div style="font-size: 14px; color: #9FD8E0;">{p.role}</div>

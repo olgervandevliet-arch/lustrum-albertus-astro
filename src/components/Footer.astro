@@ -1,5 +1,6 @@
 ---
-import site from '../data/site.json';
+import { getSiteSettings } from '../lib/sanity-queries';
+const site = await getSiteSettings();
 ---
 
 <style>
