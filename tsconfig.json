@@ -1,5 +1,8 @@
 {
   "extends": "astro/tsconfigs/strict",
   "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist", "_legacy-reference"]
+  "exclude": ["dist", "_legacy-reference"],
+  "compilerOptions": {
+    "types": ["@sanity/astro/module"]
+  }
 }

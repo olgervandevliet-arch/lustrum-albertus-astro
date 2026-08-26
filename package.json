@@ -11,7 +11,17 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.2.1",
+    "@sanity/astro": "^3.5.1",
+    "@sanity/client": "^8.3.0",
+    "@sanity/image-url": "^2.1.1",
     "astro": "^5.0.0",
-    "@astrojs/sitemap": "^3.2.1"
+    "astro-portabletext": "^1.0.0",
+    "groq": "^6.11.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-is": "^19.2.8",
+    "sanity": "^6.11.0",
+    "styled-components": "^6.5.3"
   }
 }
