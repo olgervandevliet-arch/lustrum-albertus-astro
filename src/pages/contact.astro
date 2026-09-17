@@ -6,7 +6,7 @@ import { getSiteSettings, getContactPage } from '../lib/sanity-queries';
 import { urlFor } from '../utils/sanity';
 const site = await getSiteSettings();
 const pageContent = await getContactPage();
-const { board } = pageContent;
+const { board, emailContacts } = pageContent;
 ---
 
 <BaseLayout
@@ -19,6 +19,10 @@ const { board } = pageContent;
       [data-board-grid] { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); }
       @media (min-width: 700px) {
         [data-board-grid] { grid-template-columns: repeat(4, 1fr); }
+      }
+      [data-email-grid] { grid-template-columns: 1fr; }
+      @media (min-width: 560px) {
+        [data-email-grid] { grid-template-columns: repeat(2, 1fr); }
       }
     </style>
   </Fragment>
@@ -33,16 +37,19 @@ const { board } = pageContent;
     </section>
 
     <section style="max-width: 1240px; margin: 0 auto; padding: 0 6vw clamp(50px, 6vw, 80px);">
-      <div style="display: flex; flex-wrap: wrap; gap: 18px; max-width: 900px;">
-        <a href={`mailto:${site.contactEmail}`} style="flex: 1 1 260px; display: flex; align-items: center; gap: 16px; padding: 22px; border-radius: 16px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); text-decoration: none;">
-          <i class="ph ph-envelope-simple" style="font-size: 26px; color: #BFF7F7;"></i>
-          <div>
-            <div style="font-family: 'Inter Tight', sans-serif; font-weight: 600; color: #FFFFFF; margin-bottom: 2px;">E-mail</div>
-            <div style="font-size: 15px; color: #DCEAFF;">{site.contactEmail}</div>
-          </div>
-        </a>
-        <a href={site.instagramUrl} target="_blank" rel="noopener" style="flex: 1 1 260px; display: flex; align-items: center; gap: 16px; padding: 22px; border-radius: 16px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); text-decoration: none;">
-          <i class="ph ph-instagram-logo" style="font-size: 26px; color: #BFF7F7;"></i>
+      <div data-email-grid style="display: grid; gap: 18px;">
+        {emailContacts.map((c) => (
+          <a href={`mailto:${c.email}`} style="display: flex; align-items: center; gap: 16px; padding: 22px; border-radius: 16px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); text-decoration: none;">
+            <i class="ph ph-envelope-simple" style="font-size: 26px; color: #BFF7F7; flex: 0 0 auto;"></i>
+            <div style="min-width: 0;">
+              <div style="font-family: 'Inter Tight', sans-serif; font-weight: 600; color: #FFFFFF; margin-bottom: 2px;">{c.label}</div>
+              <div style="font-size: 13px; color: #9FD8E0; margin-bottom: 2px;">{c.contactName}</div>
+              <div style="font-size: 14px; color: #DCEAFF; word-break: break-all;">{c.email}</div>
+            </div>
+          </a>
+        ))}
+        <a href={site.instagramUrl} target="_blank" rel="noopener" style="display: flex; align-items: center; gap: 16px; padding: 22px; border-radius: 16px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); text-decoration: none;">
+          <i class="ph ph-instagram-logo" style="font-size: 26px; color: #BFF7F7; flex: 0 0 auto;"></i>
           <div>
             <div style="font-family: 'Inter Tight', sans-serif; font-weight: 600; color: #FFFFFF; margin-bottom: 2px;">Instagram</div>
             <div style="font-size: 15px; color: #DCEAFF;">{site.instagramHandle}</div>
@@ -56,8 +63,13 @@ const { board } = pageContent;
       <div data-board-grid style="display: grid; gap: 22px;">
         {board.map((p) => (
           <div style="padding: 12px 12px 14px; border-radius: 14px; background: rgba(103,123,192,0.16); border: 1px solid rgba(103,123,192,0.4);">
-            <div style="width: 100%; aspect-ratio: 1; margin-bottom: 10px; border-radius: 8px; overflow: hidden;">
+            <div style="position: relative; width: 100%; aspect-ratio: 1; margin-bottom: 10px; border-radius: 8px; overflow: hidden;">
               <img src={urlFor(p.photo).width(400).height(400).url()} alt={`${p.name}, ${p.role} van het lustrumbestuur`} loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover; object-position: center 15%; transform: scale(1.6); transform-origin: center 18%; display: block;" />
+              {p.email && (
+                <a href={`mailto:${p.email}`} aria-label={`E-mail ${p.name}`} title={p.email} style="position: absolute; right: 8px; bottom: 8px; width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; background: rgba(20,30,70,0.7); backdrop-filter: blur(6px); color: #BFF7F7; text-decoration: none; font-size: 15px;">
+                  <i class="ph ph-envelope-simple"></i>
+                </a>
+              )}
             </div>
             <div style="font-family: 'Inter Tight', sans-serif; font-weight: 600; color: #FFFFFF; font-size: 16px;">{p.name}</div>
             <div style="font-size: 14px; color: #9FD8E0;">{p.role}</div>
