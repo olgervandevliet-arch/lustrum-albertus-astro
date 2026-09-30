@@ -7,6 +7,18 @@ import { urlFor } from '../utils/sanity';
 const site = await getSiteSettings();
 const pageContent = await getContactPage();
 const { board, emailContacts } = pageContent;
+
+// Board portraits are framed tight on the face. Without a crop set in the
+// Studio, cut that framing from the full-res original (rather than zooming a
+// small image up with CSS, which made them blurry).
+function boardPhotoSrc(photo: any, dims: { width: number; height: number } | null) {
+  let img = urlFor(photo);
+  if (!photo?.crop && dims) {
+    const size = Math.round(dims.width * 0.625);
+    img = img.rect(Math.round(dims.width * 0.1875), Math.round(dims.height * 0.0675), size, size);
+  }
+  return img.width(900).height(900).fit('crop').auto('format').quality(85).url();
+}
 ---
 
 <BaseLayout
@@ -64,9 +76,9 @@ const { board, emailContacts } = pageContent;
         {board.map((p) => (
           <div style="padding: 12px 12px 14px; border-radius: 14px; background: rgba(103,123,192,0.16); border: 1px solid rgba(103,123,192,0.4);">
             <div style="position: relative; width: 100%; aspect-ratio: 1; margin-bottom: 10px; border-radius: 8px; overflow: hidden;">
-              <img src={urlFor(p.photo).width(400).height(400).url()} alt={`${p.name}, ${p.role} van het lustrumbestuur`} loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover; object-position: center 15%; transform: scale(1.6); transform-origin: center 18%; display: block;" />
+              <img src={boardPhotoSrc(p.photo, p.photoDims)} alt={`${p.name}, ${p.role} van het lustrumbestuur`} loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
               {p.email && (
-                <a href={`mailto:${p.email}`} aria-label={`E-mail ${p.name}`} title={p.email} style="position: absolute; right: 8px; bottom: 8px; width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; background: rgba(20,30,70,0.7); backdrop-filter: blur(6px); color: #BFF7F7; text-decoration: none; font-size: 15px;">
+                <a href={`mailto:${p.email}`} aria-label={`Mail ${p.name} (${p.email})`} title={p.email} style="position: absolute; right: 8px; bottom: 8px; width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; background: #BFF7F7; color: #14245C; text-decoration: none; font-size: 15px;">
                   <i class="ph ph-envelope-simple"></i>
                 </a>
               )}
@@ -84,7 +96,7 @@ const { board, emailContacts } = pageContent;
       <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 18px 22px; margin-bottom: 30px; border-radius: 16px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); max-width: 720px;">
         <p style="margin: 0; flex: 1 1 260px; font-size: 15px; line-height: 1.55; color: #DCEAFF;">Wil je je kandidaat-vrijwilligersinschrijving (KVI) inleveren voor een commissie? Dat kan via de Albertus App.</p>
         <div style="display: flex; gap: 10px; flex: 0 0 auto;">
-          <a href="https://apps.apple.com/au/app/albertus-magnus/id1591068864" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 10px; background: #24356F; color: #FFFFFF; text-decoration: none; font-size: 14px; font-weight: 600;">
+          <a href="https://apps.apple.com/nl/app/albertus-magnus/id1591068864" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 10px; background: #24356F; color: #FFFFFF; text-decoration: none; font-size: 14px; font-weight: 600;">
             <i class="ph ph-apple-logo"></i> App Store
           </a>
           <a href="https://play.google.com/store/apps/details?id=nl.albertus.app&hl=nl&pli=1" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 10px; background: #24356F; color: #FFFFFF; text-decoration: none; font-size: 14px; font-weight: 600;">
@@ -96,4 +108,5 @@ const { board, emailContacts } = pageContent;
 
     <Footer />
   </div>
+
 </BaseLayout>

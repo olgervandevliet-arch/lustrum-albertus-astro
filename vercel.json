@@ -6,5 +6,12 @@
     { "source": "/admin/:path*", "destination": "https://lustrum-albertus-studio.vercel.app/admin/:path*" },
     { "source": "/static/:path*", "destination": "https://lustrum-albertus-studio.vercel.app/static/:path*" },
     { "source": "/vendor/:path*", "destination": "https://lustrum-albertus-studio.vercel.app/vendor/:path*" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "(?<host>.*\\.vercel\\.app)" }],
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
+    }
   ]
 }

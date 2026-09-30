@@ -4,8 +4,7 @@ import sitemap from '@astrojs/sitemap';
 
 import sanity from '@sanity/astro';
 
-// TODO: update to the final production domain once this Astro site gets its own deployment.
-const SITE_URL = 'https://lustrum-albertus-astro.vercel.app';
+const SITE_URL = 'https://www.lustrumalbertus.nl';
 
 const { PUBLIC_SANITY_PROJECT_ID, PUBLIC_SANITY_DATASET } = loadEnv(
   process.env.NODE_ENV ?? 'development',
