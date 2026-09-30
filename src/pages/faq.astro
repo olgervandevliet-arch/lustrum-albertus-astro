@@ -5,11 +5,24 @@ import Footer from '../components/Footer.astro';
 import { getFaqPage } from '../lib/sanity-queries';
 const pageContent = await getFaqPage();
 const { faqs } = pageContent;
+
+// Group consecutive questions under their category heading.
+const groups: { category?: string; items: any[] }[] = [];
+for (const f of faqs) {
+  const last = groups[groups.length - 1];
+  if (last && last.category === f.category) last.items.push(f);
+  else groups.push({ category: f.category, items: [f] });
+}
+
+const escapeHtml = (t: string) =>
+  t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const linkEmails = (t: string) =>
+  escapeHtml(t).replace(/[\w.+-]+@[\w-]+(\.[\w-]+)+/g, (m) => `<a href="mailto:${m}" style="color: #BFF7F7;">${m}</a>`);
 ---
 
 <BaseLayout
   title="Veelgestelde vragen — Lustrum Albertus Magnus XXVI"
-  description="Antwoorden op veelgestelde vragen over Lustrum Albertus Magnus XXVI: data, deelname, tickets, dresscode en meer."
+  description="Antwoorden op veelgestelde vragen over Lustrum Albertus Magnus XXVI: data, pakketten, tickets, munten, betalingen en meer."
   path="/faq"
   structuredData={[
     {
@@ -32,14 +45,24 @@ const { faqs } = pageContent;
     </section>
 
     <section style="max-width: 1240px; margin: 0 auto; padding: 0 6vw clamp(80px, 9vw, 130px);">
-      <div style="max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px;">
-        {faqs.map((f, i) => (
-          <div data-faq-item style="border-radius: 16px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); overflow: hidden;">
-            <button type="button" data-faq-toggle style="width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 22px; background: transparent; border: 0; cursor: pointer; text-align: left; color: #BFF7F7; font-family: 'Inter Tight', sans-serif; font-weight: 600; font-size: clamp(16px, 1.6vw, 19px);">
-              <span>{f.q}</span>
-              <i data-faq-icon class="ph ph-plus" style={`flex: 0 0 auto; font-size: 20px; transition: transform 0.25s ease; transform: rotate(${i === 0 ? '45deg' : '0deg'});`}></i>
-            </button>
-            <div data-faq-answer style={`padding: 0 22px 22px; font-size: 16px; line-height: 1.6; color: #DCEAFF; ${i === 0 ? '' : 'display: none;'}`}>{f.a}</div>
+      <div style="max-width: 800px; margin: 0 auto; display: flex; flex-direction: column; gap: 44px;">
+        {groups.map((g, gi) => (
+          <div>
+            {g.category && <h2 style="margin: 0 0 16px; font-family: 'Inter Tight', sans-serif; font-weight: 700; font-size: clamp(22px, 2.4vw, 30px); color: #BFF7F7;">{g.category}</h2>}
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              {g.items.map((f, i) => {
+                const open = gi === 0 && i === 0;
+                return (
+                  <div data-faq-item style="border-radius: 16px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); overflow: hidden;">
+                    <button type="button" data-faq-toggle style="width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 20px 22px; background: transparent; border: 0; cursor: pointer; text-align: left; color: #BFF7F7; font-family: 'Inter Tight', sans-serif; font-weight: 600; font-size: clamp(16px, 1.6vw, 19px);">
+                      <span>{f.q}</span>
+                      <i data-faq-icon class="ph ph-plus" style={`flex: 0 0 auto; font-size: 20px; transition: transform 0.25s ease; transform: rotate(${open ? '45deg' : '0deg'});`}></i>
+                    </button>
+                    <div data-faq-answer style={`padding: 0 22px 22px; font-size: 16px; line-height: 1.6; color: #DCEAFF; ${open ? '' : 'display: none;'}`} set:html={linkEmails(f.a ?? '')}></div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         ))}
       </div>

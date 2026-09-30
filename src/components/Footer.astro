@@ -3,13 +3,6 @@ import { getSiteSettings } from '../lib/sanity-queries';
 const site = await getSiteSettings();
 ---
 
-<style>
-  .footer-privacy-link:hover {
-    text-decoration: underline;
-    text-underline-offset: 3px;
-  }
-</style>
-
 <footer style="position: relative; background: #4557A4; font-family: 'Inter', system-ui, sans-serif; color: #E6F4FF; overflow: hidden; border-top: 1px solid rgba(255,255,255,0.22);">
   <div style="width: 100%; padding: 0 max(6vw, calc((100vw - 1240px) / 2)); box-sizing: border-box;">
     <div style="position: relative; width: 100%; aspect-ratio: 1200 / 404; overflow: hidden;">
@@ -23,10 +16,7 @@ const site = await getSiteSettings();
   </div>
   <div style="border-top: 1px solid rgba(255,255,255,0.22);">
     <div style="max-width: 1240px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; padding: 22px 6vw 26px; font-size: 15px; font-weight: 500; padding-top: 40px; padding-bottom: 40px">
-      <div style="display: flex; align-items: center; gap: min(6vw, 60px); flex-wrap: wrap;">
-        <span>{site.footerCopyright}</span>
-        <a href="#privacy" class="footer-privacy-link" style="color: #E6F4FF; text-decoration: none;">Privacyverklaring</a>
-      </div>
+      <span>{site.footerCopyright}</span>
       <div>Website door <a href="https://webwavers.nl" target="_blank" rel="noopener" style="color: #FFFFFF; text-decoration: underline; text-underline-offset: 3px;">Webwavers</a></div>
     </div>
   </div>
