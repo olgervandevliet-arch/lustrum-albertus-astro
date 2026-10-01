@@ -23,7 +23,7 @@ function boardPhotoSrc(photo: any, dims: { width: number; height: number } | nul
 
 <BaseLayout
   title="Contact — Lustrum Albertus Magnus XXVI"
-  description="Neem contact op met het lustrumbestuur van Lustrum Albertus Magnus XXVI voor vragen over het lustrum, sponsoring of de commissies."
+  description="Neem contact op met het lustrumcomité van Lustrum Albertus Magnus XXVI voor vragen over het lustrum, sponsoring of de commissies."
   path="/contact"
 >
   <Fragment slot="head">
@@ -71,12 +71,12 @@ function boardPhotoSrc(photo: any, dims: { width: number; height: number } | nul
     </section>
 
     <section style="max-width: 1240px; margin: 0 auto; padding: clamp(40px, 5vw, 70px) 6vw;">
-      <h2 style="margin: 0 0 28px; font-family: 'Inter Tight', sans-serif; font-weight: 700; font-size: clamp(28px, 3.2vw, 42px); color: #BFF7F7;">Lustrumbestuur</h2>
+      <h2 style="margin: 0 0 28px; font-family: 'Inter Tight', sans-serif; font-weight: 700; font-size: clamp(28px, 3.2vw, 42px); color: #BFF7F7;">Lustrumcomité</h2>
       <div data-board-grid style="display: grid; gap: 22px;">
         {board.map((p) => (
           <div style="padding: 12px 12px 14px; border-radius: 14px; background: rgba(103,123,192,0.16); border: 1px solid rgba(103,123,192,0.4);">
             <div style="position: relative; width: 100%; aspect-ratio: 1; margin-bottom: 10px; border-radius: 8px; overflow: hidden;">
-              <img src={boardPhotoSrc(p.photo, p.photoDims)} alt={`${p.name}, ${p.role} van het lustrumbestuur`} loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
+              <img src={boardPhotoSrc(p.photo, p.photoDims)} alt={`${p.name}, ${p.role} van het lustrumcomité`} loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
               {p.email && (
                 <a href={`mailto:${p.email}`} aria-label={`Mail ${p.name} (${p.email})`} title={p.email} style="position: absolute; right: 8px; bottom: 8px; width: 32px; height: 32px; display: grid; place-items: center; border-radius: 50%; background: #BFF7F7; color: #14245C; text-decoration: none; font-size: 15px;">
                   <i class="ph ph-envelope-simple"></i>
@@ -94,7 +94,7 @@ function boardPhotoSrc(photo: any, dims: { width: number; height: number } | nul
       <h2 style="margin: 0 0 10px; font-family: 'Inter Tight', sans-serif; font-weight: 700; font-size: clamp(28px, 3.2vw, 42px); color: #BFF7F7;">Commissies</h2>
       <p style="margin: 0 0 20px; max-width: 620px; font-size: 16px; line-height: 1.6; color: #DCEAFF;">De parttime commissies die het lustrum mogelijk maken.</p>
       <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 18px 22px; margin-bottom: 30px; border-radius: 16px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); max-width: 720px;">
-        <p style="margin: 0; flex: 1 1 260px; font-size: 15px; line-height: 1.55; color: #DCEAFF;">Wil je je kandidaat-vrijwilligersinschrijving (KVI) inleveren voor een commissie? Dat kan via de Albertus App.</p>
+        <p style="margin: 0; flex: 1 1 260px; font-size: 15px; line-height: 1.55; color: #DCEAFF;">Wil je je kennisgeving van interesse (KVI) inleveren voor een commissie? Dat kan via de Albertus App.</p>
         <div style="display: flex; gap: 10px; flex: 0 0 auto;">
           <a href="https://apps.apple.com/nl/app/albertus-magnus/id1591068864" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 10px; background: #24356F; color: #FFFFFF; text-decoration: none; font-size: 14px; font-weight: 600;">
             <i class="ph ph-apple-logo"></i> App Store
