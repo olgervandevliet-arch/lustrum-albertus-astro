@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import Analytics from '@vercel/analytics/astro';
 
 export interface Props {
   title: string;
@@ -106,6 +107,8 @@ const jsonLdGraph = {
   <script src="/scripts/page-transition.js" is:inline></script>
 
   <script type="application/ld+json" set:html={JSON.stringify(jsonLdGraph)} />
+
+  <Analytics />
 
   <slot name="head" />
 </head>
