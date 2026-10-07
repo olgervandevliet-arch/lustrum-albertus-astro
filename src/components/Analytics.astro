@@ -1,0 +1,46 @@
+---
+// Google Analytics 4, loaded only after the visitor accepts the cookie notice.
+// Leave GA_ID empty to switch analytics (and the notice) off entirely.
+const GA_ID = '';
+---
+
+{GA_ID && (
+  <div data-cookie-notice hidden style="position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 400; max-width: 520px; margin: 0 auto; padding: 18px 20px; border-radius: 16px; background: #24356F; border: 1px solid rgba(255,255,255,0.18); box-shadow: 0 18px 40px -20px rgba(10,20,50,0.8); font-family: 'Inter', system-ui, sans-serif; color: #DCEAFF;">
+    <p style="margin: 0 0 14px; font-size: 14px; line-height: 1.55;">We gebruiken cookies van Google Analytics om te zien hoe de site wordt gebruikt. Vind je dat goed?</p>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+      <button type="button" data-cookie-accept style="padding: 9px 18px; border-radius: 999px; border: 0; background: #BFF7F7; color: #14245C; font: 600 14px 'Inter', system-ui, sans-serif; cursor: pointer;">Accepteren</button>
+      <button type="button" data-cookie-decline style="padding: 9px 18px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.35); background: transparent; color: #FFFFFF; font: 600 14px 'Inter', system-ui, sans-serif; cursor: pointer;">Weigeren</button>
+    </div>
+  </div>
+  <script is:inline define:vars={{ GA_ID }}>
+    (function () {
+      var KEY = 'cookie-consent';
+      var notice = document.querySelector('[data-cookie-notice]');
+      var stored = null;
+      try { stored = localStorage.getItem(KEY); } catch (e) {}
+
+      function loadAnalytics() {
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_ID;
+        document.head.appendChild(s);
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function () { window.dataLayer.push(arguments); };
+        window.gtag('js', new Date());
+        window.gtag('config', GA_ID, { anonymize_ip: true });
+      }
+
+      function choose(value) {
+        try { localStorage.setItem(KEY, value); } catch (e) {}
+        notice.hidden = true;
+        if (value === 'accepted') loadAnalytics();
+      }
+
+      if (stored === 'accepted') loadAnalytics();
+      else if (stored !== 'declined') notice.hidden = false;
+
+      notice.querySelector('[data-cookie-accept]').addEventListener('click', function () { choose('accepted'); });
+      notice.querySelector('[data-cookie-decline]').addEventListener('click', function () { choose('declined'); });
+    })();
+  </script>
+)}

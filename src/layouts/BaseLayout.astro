@@ -1,5 +1,7 @@
 ---
 import '../styles/global.css';
+import Analytics from '../components/Analytics.astro';
+import VercelAnalytics from '@vercel/analytics/astro';
 
 export interface Props {
   title: string;
@@ -111,5 +113,7 @@ const jsonLdGraph = {
 </head>
 <body>
   <slot />
+  <Analytics />
+  <VercelAnalytics />
 </body>
 </html>
