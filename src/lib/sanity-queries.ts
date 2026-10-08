@@ -9,7 +9,7 @@ const HOME_PAGE_QUERY = defineQuery(`*[_id == "homePage"][0]{
 const PAKKETTEN_PAGE_QUERY = defineQuery(`*[_id == "pakkettenPage"][0]`);
 const PARTNERS_PAGE_QUERY = defineQuery(`*[_id == "partnersPage"][0]{
   eyebrow, title, description,
-  partners[]{ name, desc, src }
+  partners[]{ name, desc, src, url }
 }`);
 const FAQ_PAGE_QUERY = defineQuery(`*[_id == "faqPage"][0]`);
 const CONTACT_PAGE_QUERY = defineQuery(`*[_id == "contactPage"][0]{
