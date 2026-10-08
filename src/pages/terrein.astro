@@ -14,11 +14,13 @@ const pageContent = await getTerreinPage();
 >
   <div id="top" style="position: relative; background: linear-gradient(180deg, #3B4C99 0%, #4557A4 55%, #4557A4 100%); font-family: 'Inter', system-ui, sans-serif; min-height: 100vh; display: flex; flex-direction: column;">
     <Header />
+    <main>
     <ComingSoon
       icon={pageContent.icon}
       eyebrow={pageContent.eyebrow}
       description={pageContent.description}
     />
+    </main>
     <Footer />
   </div>
 </BaseLayout>

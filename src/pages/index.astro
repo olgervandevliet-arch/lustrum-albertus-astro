@@ -18,6 +18,8 @@ const m = pad(Math.floor(total / 60) % 60, 2);
 const s = pad(total % 60, 2);
 
 const videos = homeContent.videos;
+const thumb = (image: any, w: number) =>
+  urlFor(image).width(w).height(Math.round((w * 9) / 16)).fit('crop').auto('format').quality(70).url();
 
 const letters = [
   { id: 'S', left: '12.6vw', top: '18.6vh', size: '35vw', dx: '0.15', rot: '-9', speed: '1.2', sway: '-50' },
@@ -56,9 +58,9 @@ const letters = [
   ]}
 >
   <Fragment slot="head">
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" is:inline></script>
-    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js" is:inline></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" is:inline></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" is:inline defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js" is:inline defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" is:inline defer></script>
     <style>
       @media (max-width: 980px) {
         [data-flap-tile] { width: clamp(40px, 12.5vw, 90px) !important; height: clamp(64px, 20vw, 145px) !important; font-size: clamp(34px, 11vw, 90px) !important; }
@@ -85,12 +87,23 @@ const letters = [
   </Fragment>
 
   <div id="top" style="position: relative; background: #4557A4; font-family: 'Inter', system-ui, sans-serif;">
-    <div data-preloader style="position: fixed; inset: 0; z-index: 200; background: #4557A4; display: flex; align-items: center; justify-content: center; overflow: hidden;">
+    <div data-preloader aria-hidden="true" style="position: fixed; inset: 0; z-index: 200; background: #4557A4; display: flex; align-items: center; justify-content: center; overflow: hidden;">
       <div data-preloader-text style="position: absolute; font-family: 'Inter Tight', sans-serif; font-weight: 700; font-size: clamp(28px, 3.6vw, 54px); color: #BFF7F7; overflow: hidden;">Bereid je voor...</div>
       <div data-preloader-text style="position: absolute; font-family: 'Inter Tight', sans-serif; font-weight: 700; font-size: clamp(28px, 3.6vw, 54px); color: #BFF7F7; overflow: hidden; opacity: 0;">Voor het 26e lustrum...</div>
     </div>
+    <script is:inline>
+      // last resort: if the page scripts fail to load, the preloader must not
+      // keep covering the page
+      (function () {
+        var el = document.querySelector('[data-preloader]');
+        if (!el) return;
+        setTimeout(function () { if (el.isConnected && !el.dataset.started) el.remove(); }, 6000);
+      })();
+    </script>
 
     <Header showAnnouncement={true} />
+
+    <main>
 
     <section data-hero-wrap data-target-date={TARGET_DATE} style="position: relative; height: 300vh;">
       <div style="position: sticky; top: 0; height: 100vh; overflow: hidden; background: #BFF7F7;">
@@ -120,17 +133,18 @@ const letters = [
                 >
                   <video
                     data-tv-video
-                    src="/uploads/Lustrum preview tv-3.mp4"
-                    poster="/uploads/Lustrum preview shot .webp"
-                    autoplay
+                    data-src="/uploads/tv-preview.mp4"
+                    poster="/uploads/tv-poster.webp"
                     muted
                     loop
                     playsinline
-                    preload="auto"
+                    preload="none"
+                    aria-hidden="true"
+                    tabindex="-1"
                     style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;"
-                  ></video>
+                  ><track kind="captions" src="/uploads/tv-preview.vtt" srclang="nl" label="Geen gesproken tekst" /></video>
                 </div>
-                <img src="/uploads/Old tv.webp" alt="" style="display: block; width: 100%; height: auto; position: relative; z-index: 2;" />
+                <img src="/uploads/old-tv.webp" srcset="/uploads/old-tv-448.webp 448w, /uploads/old-tv.webp 640w" sizes="(max-width: 980px) min(320px, 62vw), min(300px, 26vw)" alt="" width="640" height="524" fetchpriority="high" decoding="async" style="display: block; width: 100%; height: auto; position: relative; z-index: 2;" />
               </div>
             </div>
             <div data-countdown-grid style="display: flex; align-items: flex-start; justify-content: center; flex-wrap: wrap; row-gap: 14px; gap: clamp(4px, 1vw, 14px); position: relative">
@@ -189,19 +203,19 @@ const letters = [
           v.available ? (
             <button type="button" data-video-open={v.embed} style="text-align: left; cursor: pointer; scroll-snap-align: start; flex: 0 0 auto; width: clamp(280px, 26vw, 400px); padding: 12px 12px 6px; border-radius: 14px; background: rgba(255,255,255,0.14); border: 1px solid rgba(255,255,255,0.14);">
               <div style="position: relative; aspect-ratio: 16 / 9; border-radius: 8px; overflow: hidden; background-color: #6E86C4;">
-                <img src={urlFor(v.thumbnail).width(800).url()} alt={`Video: ${v.title} — Lustrum Albertus Magnus XXVI`} loading="lazy" decoding="async" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;" />
+                <img src={thumb(v.thumbnail, 640)} srcset={`${thumb(v.thumbnail, 448)} 448w, ${thumb(v.thumbnail, 640)} 640w, ${thumb(v.thumbnail, 800)} 800w`} sizes="(max-width: 1100px) 256px, 376px" width="640" height="360" alt={`Video: ${v.title} — Lustrum Albertus Magnus XXVI`} loading="lazy" decoding="async" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;" />
                 <div style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 54px; height: 54px; border-radius: 50%; background: #BFF7F7; display: grid; place-items: center; box-shadow: 0 14px 30px -18px rgba(10,20,50,0.7);">
                   <span style="display: block; width: 0; height: 0; margin-left: 4px; border-left: 15px solid #3B4C99; border-top: 10px solid transparent; border-bottom: 10px solid transparent;"></span>
                 </div>
               </div>
-              <div style="padding: 12px 2px 10px; font-family: 'Inter Tight', sans-serif; font-size: clamp(17px, 1.4vw, 21px); font-weight: 600; color: #E8F9FF;">{v.title}</div>
+              <div style="padding: 12px 2px 10px; font-family: 'Inter Tight', sans-serif; font-size: clamp(17px, 1.4vw, 21px); font-weight: 600; color: #FFFFFF;">{v.title}</div>
             </button>
           ) : (
             <article style="scroll-snap-align: start; flex: 0 0 auto; width: clamp(280px, 26vw, 400px); padding: 12px 12px 6px; border-radius: 14px; background: rgba(255,255,255,0.06); border: 1px dashed rgba(255,255,255,0.2);">
               <div style="position: relative; aspect-ratio: 16 / 9; border-radius: 8px; overflow: hidden; background: rgba(255,255,255,0.04); display: flex; align-items: center; justify-content: center;">
-                <span style="font-size: 11px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: #BFF7F7; background: rgba(191,247,247,0.12); padding: 6px 12px; border-radius: 999px;">Coming soon</span>
+                <span style="font-size: 11px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: #BFF7F7; background: rgba(20,36,92,0.55); padding: 6px 12px; border-radius: 999px;">Coming soon</span>
               </div>
-              <div style="padding: 12px 2px 10px; font-family: 'Inter Tight', sans-serif; font-size: clamp(17px, 1.4vw, 21px); font-weight: 600; color: rgba(232,249,255,0.4);">Binnenkort beschikbaar</div>
+              <div style="padding: 12px 2px 10px; font-family: 'Inter Tight', sans-serif; font-size: clamp(17px, 1.4vw, 21px); font-weight: 600; color: rgba(232,249,255,0.9);">Binnenkort beschikbaar</div>
             </article>
           )
         ))}
@@ -219,8 +233,10 @@ const letters = [
       </div>
     </div>
 
+    </main>
+
     <Footer />
   </div>
 
-  <script src="/scripts/home.js" is:inline></script>
+  <script src="/scripts/home.js" is:inline defer></script>
 </BaseLayout>

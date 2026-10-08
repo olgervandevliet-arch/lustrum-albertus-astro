@@ -1,6 +1,9 @@
 ---
 import '../styles/global.css';
 import Analytics from '../components/Analytics.astro';
+import interFont from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
+import interTightFont from '@fontsource-variable/inter-tight/files/inter-tight-latin-wght-normal.woff2?url';
+import pageTransitionScript from '../../public/scripts/page-transition.js?raw';
 import VercelAnalytics from '@vercel/analytics/astro';
 
 export interface Props {
@@ -35,7 +38,7 @@ const organizationNode = {
   '@id': siteRoot + '#organization',
   name: 'Studentenvereniging Albertus Magnus',
   url: siteRoot,
-  logo: new URL('/uploads/AM-lustrum-fav.png', Astro.site).toString(),
+  logo: new URL('/uploads/logo-512.png', Astro.site).toString(),
   sameAs: ['https://www.instagram.com/lustrumalbertus/', 'https://www.youtube.com/@lustrumalbertusmagnusxxvi'],
 };
 
@@ -95,17 +98,16 @@ const jsonLdGraph = {
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={ogImageURL} />
 
-  <link rel="icon" type="image/png" href="/uploads/AM-lustrum-fav.png" />
+  <link rel="icon" type="image/png" href="/uploads/favicon-192.png" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Inter+Tight:wght@400;500;600;700;800&display=swap"
-    rel="stylesheet"
-  />
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" is:inline></script>
-  <script src="https://unpkg.com/@phosphor-icons/web" is:inline></script>
-  <script src="/scripts/page-transition.js" is:inline></script>
+  <link rel="preload" href={interFont} as="font" type="font/woff2" crossorigin="" />
+  <link rel="preload" href={interTightFont} as="font" type="font/woff2" crossorigin="" />
+  <link rel="preload" href="/vendor/phosphor/Phosphor.woff2" as="font" type="font/woff2" crossorigin="" />
+  <link rel="stylesheet" href="/vendor/phosphor/phosphor.css" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin="" />
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" is:inline defer></script>
+  <!-- inlined: it must run before the first paint (curtain colour), without an extra blocking request -->
+  <script is:inline set:html={pageTransitionScript} />
 
   <script type="application/ld+json" set:html={JSON.stringify(jsonLdGraph)} />
 

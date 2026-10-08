@@ -149,51 +149,71 @@
 
   /* ---------- preloader ---------- */
   let startLetterIntro = null;
+  let preloaderDone = false;
+
+  // the preloader covers the whole page, so it must always go away: when it has
+  // played, when the visitor has seen it before, and when a script or font it
+  // waits for is slow or never arrives
+  function finishPreloader() {
+    if (preloaderDone) return;
+    preloaderDone = true;
+    const el = document.querySelector('[data-preloader]');
+    if (el) el.remove();
+    if (startLetterIntro) startLetterIntro();
+  }
 
   function runPreloader() {
+    if (preloaderDone) return;
     const el = document.querySelector('[data-preloader]');
-    if (!el) { if (startLetterIntro) startLetterIntro(); return; }
-    let seen = false;
-    try {
-      seen = localStorage.getItem('albertus-visited') === '1';
-      localStorage.setItem('albertus-visited', '1');
-    } catch (e) {}
-    if (seen) {
-      el.remove();
-      if (startLetterIntro) startLetterIntro();
-      return;
-    }
+    if (!el) { finishPreloader(); return; }
+    el.dataset.started = '1';
     const gsap = window.gsap;
     const texts = Array.from(el.querySelectorAll('[data-preloader-text]'));
-    const tl = gsap.timeline({
-      onComplete: () => {
-        if (startLetterIntro) startLetterIntro();
-        gsap.to(el, {
-          yPercent: 100,
-          duration: 0.9,
-          ease: 'power4.inOut',
-          onComplete: () => el.remove(),
-        });
-      },
-    });
-    texts.forEach((t, i) => {
-      const split = new window.SplitText(t, { type: 'words, chars' });
-      gsap.set(t, { opacity: 1 });
-      gsap.set(split.chars, { opacity: 0, yPercent: 120 });
-      tl.to(split.chars, { opacity: 1, yPercent: 0, duration: 0.4, stagger: 0.02, ease: 'power2.out' });
-      tl.to(split.chars, { opacity: 0, yPercent: -120, duration: 0.3, stagger: 0.015, ease: 'power2.in' }, '+=0.5');
-      if (i < texts.length - 1) tl.set(t, { opacity: 0 });
-    });
+    try {
+      const tl = gsap.timeline({
+        onComplete: () => {
+          preloaderDone = true;
+          if (startLetterIntro) startLetterIntro();
+          gsap.to(el, {
+            yPercent: 100,
+            duration: 0.9,
+            ease: 'power4.inOut',
+            onComplete: () => el.remove(),
+          });
+        },
+      });
+      texts.forEach((t, i) => {
+        const split = new window.SplitText(t, { type: 'words, chars', aria: 'none' });
+        gsap.set(t, { opacity: 1 });
+        gsap.set(split.chars, { opacity: 0, yPercent: 120 });
+        tl.to(split.chars, { opacity: 1, yPercent: 0, duration: 0.4, stagger: 0.02, ease: 'power2.out' });
+        tl.to(split.chars, { opacity: 0, yPercent: -120, duration: 0.3, stagger: 0.015, ease: 'power2.in' }, '+=0.5');
+        if (i < texts.length - 1) tl.set(t, { opacity: 0 });
+      });
+    } catch (e) {
+      finishPreloader();
+    }
   }
 
   function waitForGsapPreloader(tries) {
     tries = tries || 0;
+    if (!document.querySelector('[data-preloader]')) { finishPreloader(); return; }
     if (window.gsap && window.SplitText) {
-      if (document.fonts && document.fonts.ready) document.fonts.ready.then(runPreloader);
-      else runPreloader();
+      // don't hold the blue screen for a slow web font
+      const fonts = document.fonts && document.fonts.ready;
+      const cap = new Promise((res) => setTimeout(res, 1200));
+      (fonts ? Promise.race([fonts, cap]) : cap).then(() => {
+        // after an in-site navigation this page sits behind the curtain until it
+        // is revealed; start only then, so the preloader is actually seen
+        let started = false;
+        const start = () => { if (!started) { started = true; runPreloader(); } };
+        const pt = window.__pageTransition;
+        if (pt && pt.onRevealed) { pt.onRevealed(start); setTimeout(start, 4000); }
+        else start();
+      });
       return;
     }
-    if (tries > 120) return;
+    if (tries > 50) { finishPreloader(); return; }
     setTimeout(() => waitForGsapPreloader(tries + 1), 60);
   }
   waitForGsapPreloader();
@@ -237,7 +257,7 @@
     };
 
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const preloaderActive = !!document.querySelector('[data-preloader]');
+    const preloaderActive = !preloaderDone && !!document.querySelector('[data-preloader]');
 
     // all letters fall by the SAME amount so their hand-tuned relative vertical
     // offsets (and thus the stacked/piled look) are preserved, rather than each
@@ -312,7 +332,18 @@
 
     const tvVideo = document.querySelector('[data-tv-video]');
     if (tvVideo) {
-      const tryPlayTvVideo = () => { tvVideo.play().catch(() => {}); };
+      // the clip is decoration: fetch it only once the page itself has loaded
+      const tryPlayTvVideo = () => {
+        if (!tvVideo.getAttribute('src')) return;
+        tvVideo.play().catch(() => {});
+      };
+      const attachTvVideo = () => {
+        if (tvVideo.getAttribute('src')) return;
+        tvVideo.src = tvVideo.dataset.src;
+        tryPlayTvVideo();
+      };
+      if (document.readyState === 'complete') setTimeout(attachTvVideo, 300);
+      else window.addEventListener('load', () => setTimeout(attachTvVideo, 300), { once: true });
       waitForReveal(tryPlayTvVideo);
       tvVideo.addEventListener('loadedmetadata', tryPlayTvVideo);
       tvVideo.addEventListener('canplay', tryPlayTvVideo);

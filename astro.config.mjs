@@ -3,6 +3,7 @@ import { loadEnv } from 'vite';
 import sitemap from '@astrojs/sitemap';
 
 import sanity from '@sanity/astro';
+import phosphorSubset from './integrations/phosphor-subset.mjs';
 
 const SITE_URL = 'https://www.lustrumalbertus.nl';
 
@@ -24,5 +25,5 @@ export default defineConfig({
     projectId: PUBLIC_SANITY_PROJECT_ID,
     dataset: PUBLIC_SANITY_DATASET,
     useCdn: false,
-  })],
+  }), phosphorSubset()],
 });

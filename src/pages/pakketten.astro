@@ -23,9 +23,10 @@ const { packages } = pageContent;
 
   <div id="top" style="position: relative; background: #4557A4; font-family: 'Inter', system-ui, sans-serif; min-height: 100vh;">
     <Header />
+    <main>
 
     <section style="max-width: 1240px; margin: 0 auto; padding: clamp(150px, 16vw, 200px) 6vw clamp(30px, 4vw, 50px);">
-      <div style="font-family: 'Inter Tight', sans-serif; font-weight: 600; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: #9FD8E0; margin-bottom: 14px;">{pageContent.eyebrow}</div>
+      <div style="font-family: 'Inter Tight', sans-serif; font-weight: 600; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: #BDEEF2; margin-bottom: 14px;">{pageContent.eyebrow}</div>
       <h1 style="margin: 0 0 18px; font-family: 'Inter Tight', sans-serif; font-weight: 700; font-size: clamp(38px, 6vw, 84px); line-height: 1.02; letter-spacing: -0.02em; color: #BFF7F7;">{pageContent.title}</h1>
       <p style="margin: 0; max-width: 700px; font-size: clamp(16px, 1.6vw, 19px); line-height: 1.65; color: #DCEAFF;">{pageContent.description}</p>
     </section>
@@ -39,14 +40,14 @@ const { packages } = pageContent;
             <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; flex: 1;">
               {p.features.map((f) => (
                 <div style="display: flex; align-items: flex-start; gap: 10px; font-size: 15px; line-height: 1.5; color: #DCEAFF;">
-                  <i class="ph ph-check-circle" style="flex: 0 0 auto; color: #9FD8E0; font-size: 18px; margin-top: 2px;"></i>
+                  <i class="ph ph-check-circle" style="flex: 0 0 auto; color: #BDEEF2; font-size: 18px; margin-top: 2px;"></i>
                   <span>{f}</span>
                 </div>
               ))}
             </div>
             <div style="border-top: 1px solid rgba(255,255,255,0.16); padding-top: 16px; display: flex; flex-direction: column; gap: 4px;">
-              <div style="font-size: 14px; color: #9FD8E0;">11 maanden: <span style="color: #FFFFFF; font-weight: 600;">€{p.m11} p/m</span></div>
-              <div style="font-size: 14px; color: #9FD8E0;">10 maanden: <span style="color: #FFFFFF; font-weight: 600;">€{p.m10} p/m</span></div>
+              <div style="font-size: 14px; color: #BDEEF2;">11 maanden: <span style="color: #FFFFFF; font-weight: 600;">€{p.m11} p/m</span></div>
+              <div style="font-size: 14px; color: #BDEEF2;">10 maanden: <span style="color: #FFFFFF; font-weight: 600;">€{p.m10} p/m</span></div>
             </div>
           </div>
         ))}
@@ -64,7 +65,7 @@ const { packages } = pageContent;
       <div style="max-width: 760px; display: flex; flex-direction: column; gap: 14px; font-size: 16px; line-height: 1.7; color: #DCEAFF;">
         <p style="margin: 0;">Je kunt ervoor kiezen om het bedrag van jouw spaarpakket in 11 of 10 maandelijkse termijnen te betalen. Kies je voor 11 termijnen, dan vindt de eerste incasso plaats in augustus 2026 en loopt het sparen tot en met juni 2027. Kies je voor 10 termijnen, dan start de eerste incasso in september 2026 en loopt het sparen ook tot en met juni 2027. Daarnaast is het mogelijk om het volledige bedrag in één keer te betalen — dit bedrag wordt bij de eerste incasso afgeschreven.</p>
         <div style="display: flex; gap: 12px; padding: 18px 20px; border-radius: 14px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14);">
-          <i class="ph ph-info" style="flex: 0 0 auto; font-size: 20px; color: #9FD8E0; margin-top: 2px;"></i>
+          <i class="ph ph-info" style="flex: 0 0 auto; font-size: 20px; color: #BDEEF2; margin-top: 2px;"></i>
           <p style="margin: 0; font-size: 15px; line-height: 1.6;">Let op: ben je net senior geworden maar wil je toch nog een ouderejaarspakket afsluiten? Wacht dan nog even met het afsluiten van je pakket — zonder debiteurennummer is dit namelijk nog niet mogelijk. Zodra dit wel kan, laten we het weten!</p>
         </div>
       </div>
@@ -81,6 +82,7 @@ const { packages } = pageContent;
         </a>
       </div>
     </section>
+    </main>
 
     <Footer />
   </div>

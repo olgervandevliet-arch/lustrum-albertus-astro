@@ -15,19 +15,20 @@ const { partners } = pageContent;
 >
   <div id="top" style="position: relative; background: #4557A4; font-family: 'Inter', system-ui, sans-serif; min-height: 100vh;">
     <Header />
+    <main>
 
     <section style="max-width: 1240px; margin: 0 auto; padding: clamp(150px, 16vw, 200px) 6vw clamp(50px, 6vw, 80px);">
-      <div style="font-family: 'Inter Tight', sans-serif; font-weight: 600; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: #9FD8E0; margin-bottom: 14px;">{pageContent.eyebrow}</div>
+      <div style="font-family: 'Inter Tight', sans-serif; font-weight: 600; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: #BDEEF2; margin-bottom: 14px;">{pageContent.eyebrow}</div>
       <h1 style="margin: 0 0 18px; font-family: 'Inter Tight', sans-serif; font-weight: 700; font-size: clamp(38px, 6vw, 84px); line-height: 1.02; letter-spacing: -0.02em; color: #BFF7F7;">{pageContent.title}</h1>
       <p style="margin: 0; max-width: 620px; font-size: clamp(16px, 1.6vw, 19px); line-height: 1.6; color: #DCEAFF;">{pageContent.description}</p>
     </section>
 
     <section style="max-width: 1240px; margin: 0 auto; padding: 0 6vw clamp(80px, 9vw, 130px);">
       <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px;">
-        {partners.map((p) => (
+        {partners.map((p, i) => (
           <div style="border-radius: 16px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); overflow: hidden;">
             <div style="background: #FFFFFF; padding: 28px; display: flex; align-items: center; justify-content: center; height: 120px;">
-              <img src={urlFor(p.src).width(400).url()} alt={`${p.name} — partner van Lustrum Albertus Magnus XXVI`} loading="lazy" decoding="async" style="width: 100%; height: 100%; object-fit: contain;" />
+              <img src={urlFor(p.src).width(400).auto('format').url()} srcset={`${urlFor(p.src).width(280).auto('format').url()} 280w, ${urlFor(p.src).width(400).auto('format').url()} 400w`} sizes="(max-width: 600px) 60vw, 200px" alt={`${p.name} — partner van Lustrum Albertus Magnus XXVI`} loading={i < 2 ? 'eager' : 'lazy'} fetchpriority={i === 0 ? 'high' : undefined} decoding="async" style="width: 100%; height: 100%; object-fit: contain;" />
             </div>
             <div style="padding: 18px 20px 22px;">
               <div style="font-family: 'Inter Tight', sans-serif; font-weight: 600; font-size: 18px; color: #FFFFFF; margin-bottom: 6px;">{p.name}</div>
@@ -42,6 +43,7 @@ const { partners } = pageContent;
         </a>
       </div>
     </section>
+    </main>
 
     <Footer />
   </div>
