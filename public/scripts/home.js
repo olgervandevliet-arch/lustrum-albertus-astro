@@ -106,6 +106,220 @@
   closeButtons.forEach((btn) => btn.addEventListener('click', closeVideo));
   modal?.addEventListener('click', (e) => { if (e.target === modal) closeVideo(); });
 
+  /* ---------- tv theater: the tv zooms in and plays the newest video on its own screen ---------- */
+  (function () {
+    const theater = document.querySelector('[data-tv-theater]');
+    const opener = document.querySelector('[data-tv-theater-open]');
+    const smallTv = document.querySelector('[data-tv-wrap]');
+    if (!theater || !opener || !smallTv) return;
+    const bigTv = theater.querySelector('[data-tv-theater-tv]');
+    const bigImg = theater.querySelector('[data-tv-theater-img]');
+    const frame = theater.querySelector('[data-tv-theater-frame]');
+    const canvas = theater.querySelector('[data-tv-theater-static]');
+    const backdrop = theater.querySelector('[data-tv-theater-backdrop]');
+    const closeBtn = theater.querySelector('[data-tv-theater-close]');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // where the glass sits inside the tv picture, as fractions of its width/height
+    const TV_RATIO = 524 / 640;
+    let state = 'closed';
+    let staticRaf = 0;
+    let onPlaying = null;
+    let openCount = 0;
+    const command = (func, args) => {
+      try { frame.contentWindow.postMessage(JSON.stringify({ event: 'command', func: func, args: args || [], id: 1, channel: 'widget' }), '*'); } catch (err) {}
+    };
+
+    // the small tv picture is shown first (already cached); the sharp one replaces it once loaded
+    let bigImgRequested = false;
+    const loadBigImg = () => {
+      if (bigImgRequested) return;
+      bigImgRequested = true;
+      const sharp = new Image();
+      sharp.onload = () => { bigImg.src = sharp.src; };
+      sharp.src = bigImg.dataset.src;
+    };
+    opener.addEventListener('pointerenter', loadBigImg, { once: true });
+
+    // tv noise, drawn small and scaled up: random grain with drifting horizontal bands
+    const ctx = canvas.getContext('2d');
+    // 'full' covers the whole screen. 'bands' leaves the picture visible and only
+    // keeps two drifting strips of noise: one over the top and one over the middle,
+    // which is where YouTube shows its title and pause icon for the first seconds.
+    let staticMode = 'full';
+    const bandAlpha = (pos, t) => {
+      const top = 1 - Math.min(1, Math.max(0, (pos - 0.15) / 0.05));
+      const mid = 0.5 + 0.012 * Math.sin(t * 5);
+      const middle = 1 - Math.min(1, Math.max(0, (Math.abs(pos - mid) - 0.075) / 0.04));
+      return Math.max(top, middle);
+    };
+    const drawStatic = (time) => {
+      const w = canvas.width, h = canvas.height;
+      const img = ctx.createImageData(w, h);
+      const d = img.data;
+      const t = time / 1000;
+      for (let y = 0; y < h; y++) {
+        const yy = (y / h) * 128;
+        const band = 0.5 + 0.3 * Math.sin(yy * 0.19 + t * 7) + 0.2 * Math.sin(yy * 0.61 - t * 13);
+        const alpha = staticMode === 'full' ? 255 : 255 * bandAlpha(y / h, t);
+        if (!alpha) continue;
+        for (let x = 0; x < w; x++) {
+          const v = Math.random() * 255 * band;
+          const i = (y * w + x) * 4;
+          d[i] = v * 0.92; d[i + 1] = v * 0.97; d[i + 2] = v; d[i + 3] = alpha;
+        }
+      }
+      ctx.putImageData(img, 0, 0);
+    };
+    const startStatic = () => {
+      staticMode = 'full';
+      canvas.style.opacity = '1';
+      canvas.style.display = 'block';
+      // fine grain: about one noise dot per two screen pixels at the tv's full size
+      const screenW = parseFloat(bigTv.style.width) * 0.72;
+      canvas.width = Math.max(240, Math.min(720, Math.round(screenW / 1.6)));
+      canvas.height = Math.round(canvas.width * 0.8);
+      cancelAnimationFrame(staticRaf);
+      let last = 0;
+      const loop = (time) => {
+        if (time - last > 45) { drawStatic(time); last = time; }
+        staticRaf = requestAnimationFrame(loop);
+      };
+      drawStatic(performance.now());
+      staticRaf = requestAnimationFrame(loop);
+    };
+    const stopStatic = () => {
+      const gsap = window.gsap;
+      const done = () => { cancelAnimationFrame(staticRaf); canvas.style.display = 'none'; };
+      if (gsap && !reducedMotion) gsap.to(canvas, { opacity: 0, duration: 0.45, ease: 'power1.out', onComplete: done });
+      else done();
+    };
+
+    // the whole tv stays in view, a bit smaller than the window
+    const targetBox = () => {
+      const vw = window.innerWidth, vh = window.innerHeight;
+      const width = Math.min(vw * 0.94, (vh * 0.84) / TV_RATIO, 1000);
+      const height = width * TV_RATIO;
+      return { width, x: (vw - width) / 2, y: (vh - height) / 2 };
+    };
+
+    function open() {
+      if (state !== 'closed') return;
+      state = 'opening';
+      const gsap = window.gsap;
+      loadBigImg();
+      const from = smallTv.getBoundingClientRect();
+      const box = targetBox();
+      bigTv.style.width = box.width + 'px';
+      theater.style.display = 'block';
+      document.documentElement.style.overflow = 'hidden';
+      if (lenis) lenis.stop();
+      smallTv.style.visibility = 'hidden';
+      startStatic();
+      frame.setAttribute('src', opener.getAttribute('data-tv-theater-open') + '?autoplay=1&rel=0&controls=0&playsinline=1&enablejsapi=1&disablekb=1&iv_load_policy=3');
+      const session = ++openCount;
+      const startedAt = performance.now();
+      let zoomed = false, loaded = false, revealed = false, playing = false, playingAt = 0;
+      // full noise as the intro, for a moment even when the video is quick
+      const INTRO_MS = 1400;
+      // YouTube shows the video title and a pause icon for the first seconds of
+      // playback and offers no way to turn that off. Instead of hiding the whole
+      // picture that long, only two strips of noise stay over those spots.
+      const OVERLAY_MS = 4300;
+      const reveal = () => {
+        if (session !== openCount || revealed || !zoomed || !loaded || state !== 'open') return;
+        revealed = true;
+        const now = performance.now();
+        const showPicture = Math.max(0, INTRO_MS - (now - startedAt));
+        const clearAll = playing ? Math.max(showPicture + 400, OVERLAY_MS - (now - playingAt)) : showPicture;
+        setTimeout(() => { if (session === openCount && state === 'open' && playing) staticMode = 'bands'; }, showPicture);
+        setTimeout(() => { if (session === openCount && state === 'open') stopStatic(); }, clearAll);
+      };
+      onPlaying = () => {
+        onPlaying = null;
+        playing = true;
+        playingAt = performance.now();
+        loaded = true;
+        reveal();
+      };
+      // some browsers refuse to start a video with sound by themselves. If nothing
+      // is playing shortly after the player has loaded, lift the noise and let the
+      // visitor press YouTube's own play button.
+      const giveUpWaiting = () => {
+        if (session !== openCount || playing) return;
+        frame.style.pointerEvents = 'auto';
+        loaded = true;
+        reveal();
+      };
+      frame.addEventListener('load', () => setTimeout(giveUpWaiting, 3000), { once: true });
+      setTimeout(giveUpWaiting, 7000);
+      const finish = () => { state = 'open'; zoomed = true; closeBtn.focus({ preventScroll: true }); reveal(); };
+      if (gsap && !reducedMotion) {
+        gsap.set(bigTv, { x: from.left, y: from.top, scale: from.width / box.width });
+        gsap.to(bigTv, { x: box.x, y: box.y, scale: 1, duration: 0.95, ease: 'power3.inOut', onComplete: finish });
+        gsap.fromTo(backdrop, { opacity: 0 }, { opacity: 1, duration: 0.6, ease: 'power1.out' });
+        gsap.fromTo(closeBtn, { opacity: 0 }, { opacity: 1, duration: 0.3, delay: 0.7 });
+      } else {
+        bigTv.style.transform = 'translate(' + box.x + 'px,' + box.y + 'px)';
+        backdrop.style.opacity = '1';
+        finish();
+      }
+    }
+
+    function close() {
+      if (state !== 'open') return;
+      state = 'closing';
+      const gsap = window.gsap;
+      frame.setAttribute('src', '');
+      frame.style.pointerEvents = 'none';
+      startStatic();
+      const done = () => {
+        cancelAnimationFrame(staticRaf);
+        theater.style.display = 'none';
+        smallTv.style.visibility = '';
+        document.documentElement.style.overflow = '';
+        if (lenis) lenis.start();
+        state = 'closed';
+        opener.focus({ preventScroll: true });
+      };
+      if (gsap && !reducedMotion) {
+        const to = smallTv.getBoundingClientRect();
+        const width = parseFloat(bigTv.style.width);
+        gsap.to(bigTv, { x: to.left, y: to.top, scale: to.width / width, duration: 0.75, ease: 'power3.inOut', onComplete: done });
+        gsap.to(backdrop, { opacity: 0, duration: 0.5, delay: 0.2 });
+        gsap.to(closeBtn, { opacity: 0, duration: 0.2 });
+      } else {
+        done();
+      }
+    }
+
+    window.addEventListener('message', (e) => {
+      if (state === 'closed' || e.source !== frame.contentWindow) return;
+      let data = e.data;
+      try { if (typeof data === 'string') data = JSON.parse(data); } catch (err) { return; }
+      const playerState = data && data.event === 'onStateChange' ? data.info : data && data.event === 'infoDelivery' && data.info ? data.info.playerState : undefined;
+      if (playerState === 1 && onPlaying) onPlaying();
+      if (playerState === 0) close();
+    });
+    frame.addEventListener('load', () => {
+      if (!frame.getAttribute('src')) return;
+      try {
+        frame.contentWindow.postMessage(JSON.stringify({ event: 'listening', id: 1, channel: 'widget' }), '*');
+        frame.contentWindow.postMessage(JSON.stringify({ event: 'command', func: 'addEventListener', args: ['onStateChange'], id: 1, channel: 'widget' }), '*');
+      } catch (err) {}
+    });
+
+    opener.addEventListener('click', open);
+    closeBtn.addEventListener('click', close);
+    backdrop.addEventListener('click', close);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+    window.addEventListener('resize', () => {
+      if (state !== 'open') return;
+      const box = targetBox();
+      bigTv.style.width = box.width + 'px';
+      if (window.gsap) window.gsap.set(bigTv, { x: box.x, y: box.y, scale: 1 });
+    });
+  })();
+
   const track = document.querySelector('[data-video-track]');
   document.querySelector('[data-video-prev]')?.addEventListener('click', () => {
     track?.scrollBy({ left: -(track.clientWidth * 0.8), behavior: 'smooth' });
@@ -146,6 +360,27 @@
     setTimeout(() => waitForSplit(tries + 1), 60);
   }
   waitForSplit();
+
+  /* ---------- tv bar: the title of the newest video slides by ---------- */
+  (function () {
+    const ticker = document.querySelector('[data-tv-bar-ticker]');
+    if (!ticker || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const start = () => {
+      // one repetition of the title, measured in the svg's own units
+      const loop = ticker.getComputedTextLength() / 6;
+      if (!loop) return;
+      const from = Number(ticker.getAttribute('startOffset'));
+      const anim = document.createElementNS('http://www.w3.org/2000/svg', 'animate');
+      anim.setAttribute('attributeName', 'startOffset');
+      anim.setAttribute('from', String(from));
+      anim.setAttribute('to', String(from - loop));
+      anim.setAttribute('dur', (loop / 34).toFixed(2) + 's');
+      anim.setAttribute('repeatCount', 'indefinite');
+      ticker.appendChild(anim);
+    };
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(start);
+    else start();
+  })();
 
   /* ---------- preloader ---------- */
   let startLetterIntro = null;
@@ -421,7 +656,11 @@
       // so that has to be cancelled out before adding this tween's own offset
       const finalCenterBeforeOwnY = tvBottomFixed - finalTvHeight / 2 + counterTargetY;
       const targetY = window.innerHeight / 2 - finalCenterBeforeOwnY;
-      tl.to(tvWrap, { scale: targetScale, x: targetX, y: targetY, duration: 0.8, ease: 'none' }, 0);
+      tl.to(tvWrap, {
+        scale: targetScale, x: targetX, y: targetY, duration: 0.8, ease: 'none',
+        // the play button keeps its own size while the tv grows
+        onUpdate: () => tvWrap.style.setProperty('--tv-inv', String(1 / (Number(gsap.getProperty(tvWrap, 'scale')) || 1))),
+      }, 0);
     }
 
     const title = document.querySelector('[data-hero-title]');

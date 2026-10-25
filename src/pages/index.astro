@@ -5,6 +5,7 @@ import Footer from '../components/Footer.astro';
 import CountdownFlap from '../components/CountdownFlap.astro';
 import { getHomePage } from '../lib/sanity-queries';
 import { urlFor } from '../utils/sanity';
+import '@fontsource/vt323/latin-400.css';
 
 const homeContent = await getHomePage();
 
@@ -18,6 +19,8 @@ const m = pad(Math.floor(total / 60) % 60, 2);
 const s = pad(total % 60, 2);
 
 const videos = homeContent.videos;
+// the newest video is the first one in the list that can be played
+const latestVideo = videos.find((v: any) => v.available && v.embed);
 const thumb = (image: any, w: number) =>
   urlFor(image).width(w).height(Math.round((w * 9) / 16)).fit('crop').auto('format').quality(70).url();
 
@@ -78,6 +81,13 @@ const letters = [
         [data-letter="U2"] { font-size: 50vw !important; left: 54vw !important; top: 34vh !important; }
         [data-letter="L"] { font-size: 64vw !important; left: -10vw !important; top: 40vh !important; }
       }
+      [data-tv-play] { opacity: 0; transform: scale(calc(0.8 * var(--tv-inv, 1))); transition: opacity 0.25s ease, transform 0.25s ease; }
+      [data-tv-bar]:hover [data-tv-play], [data-tv-bar]:focus-visible [data-tv-play] { opacity: 1; transform: scale(var(--tv-inv, 1)); }
+      @media (hover: none) { [data-tv-play] { opacity: 0.9; transform: scale(calc(0.8 * var(--tv-inv, 1))); } }
+      [data-tv-bar-new] { animation: tv-bar-blink 1.8s ease-in-out infinite; }
+      @keyframes tv-bar-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+      [data-tv-bar]:hover [data-tv-bar-new], [data-tv-bar]:focus-visible [data-tv-bar-new] { animation: none; opacity: 1; }
+      @media (prefers-reduced-motion: reduce) { [data-tv-bar-new] { animation: none; } }
       @media (min-width: 981px) {
         [data-counter] { bottom: calc(14vh - 32px) !important; }
       }
@@ -127,7 +137,7 @@ const letters = [
               <div style="position: relative; width: 100%;">
                 <div
                   data-tv-screen
-                  style="position: absolute; left: 9%; top: 13%; width: 72%; height: 70%; overflow: hidden; background: #0b0f23; z-index: 1;"
+                  style="position: absolute; left: 9%; top: 13%; width: 72%; height: 70%; overflow: hidden; background: #0b0f23; z-index: 1; container-type: inline-size;"
                 >
                   <video
                     data-tv-video
@@ -141,6 +151,43 @@ const letters = [
                     tabindex="-1"
                     style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;"
                   ><track kind="captions" src="/uploads/tv-preview.vtt" srclang="nl" label="Geen gesproken tekst" /></video>
+                  {latestVideo && (
+                    <button type="button" data-tv-theater-open={latestVideo.embed} data-tv-bar aria-label={`Bekijk de nieuwste video: ${latestVideo.title}`} style="position: absolute; inset: 0; padding: 0; border: 0; background: transparent; cursor: pointer; pointer-events: auto; text-align: left;">
+                      <span data-tv-play aria-hidden="true" style="position: absolute; left: 50%; top: 44%; width: 24cqw; aspect-ratio: 1; margin: -12cqw 0 0 -12cqw; border-radius: 50%; background: #BFF7F7; display: grid; place-items: center; box-shadow: 0 2cqw 6cqw rgba(5,6,15,0.45);">
+                        <span style="display: block; width: 0; height: 0; margin-left: 1.6cqw; border-left: 8cqw solid #14245C; border-top: 5cqw solid transparent; border-bottom: 5cqw solid transparent;"></span>
+                      </span>
+                      <span data-tv-bar-strip style="position: absolute; left: 0; right: 0; bottom: 0; height: 19cqw; overflow: hidden;">
+                        <svg viewBox="0 -8 400 76" preserveAspectRatio="none" aria-hidden="true" style="display: block; width: 100%; height: 100%; font-family: 'VT323', 'Courier New', monospace; font-size: 28px; letter-spacing: 0.5px; text-transform: uppercase;">
+                          <defs>
+                            {/* bar and baseline sag slightly in the middle, like the curved glass of the tv */}
+                            <path id="tv-bar-curve" d="M -3000,28 L 0,28 Q 200,58 400,28 L 3000,28" />
+                            <pattern id="tv-bar-lines" width="4" height="3" patternUnits="userSpaceOnUse">
+                              <rect width="4" height="1" fill="#FFFFFF" opacity="0.07" />
+                            </pattern>
+                            <linearGradient id="tv-bar-fade" x1="0" x2="400" gradientUnits="userSpaceOnUse">
+                              <stop offset="0.175" stop-color="#000" />
+                              <stop offset="0.225" stop-color="#fff" />
+                              <stop offset="0.86" stop-color="#fff" />
+                              <stop offset="0.93" stop-color="#000" />
+                            </linearGradient>
+                            <mask id="tv-bar-mask" maskUnits="userSpaceOnUse" x="0" y="-8" width="400" height="76">
+                              <rect y="-8" width="400" height="76" fill="url(#tv-bar-fade)" />
+                            </mask>
+                          </defs>
+                          <path d="M 0,-4 Q 200,26 400,-4 L 400,68 L 0,68 Z" fill="#05060F" />
+                          <g mask="url(#tv-bar-mask)">
+                            <text fill="#CBC2FF" xml:space="preserve">
+                              <textPath data-tv-bar-ticker href="#tv-bar-curve" startOffset="3094">{`${latestVideo.title}  \u25B6  `.repeat(6)}</textPath>
+                            </text>
+                          </g>
+                          <text data-tv-bar-new fill="#BFF7F7">
+                            <textPath href="#tv-bar-curve" startOffset="3040">Nu</textPath>
+                          </text>
+                          <path d="M 0,-4 Q 200,26 400,-4 L 400,68 L 0,68 Z" fill="url(#tv-bar-lines)" />
+                        </svg>
+                      </span>
+                    </button>
+                  )}
                 </div>
                 <img src="/uploads/old-tv.webp" srcset="/uploads/old-tv-448.webp 448w, /uploads/old-tv.webp 640w" sizes="(max-width: 980px) min(320px, 62vw), min(300px, 26vw)" alt="" width="640" height="524" fetchpriority="high" decoding="async" style="display: block; width: 100%; height: auto; position: relative; z-index: 2;" />
               </div>
@@ -219,6 +266,23 @@ const letters = [
         ))}
       </div>
     </section>
+
+    {latestVideo && (
+      <div data-tv-theater role="dialog" aria-modal="true" aria-label={`Video: ${latestVideo.title}`} style="display: none; position: fixed; inset: 0; z-index: 300; overflow: hidden;">
+        <div data-tv-theater-backdrop style="position: absolute; inset: 0; background: rgba(11,15,35,0.92); opacity: 0;"></div>
+        <div data-tv-theater-tv style="position: absolute; left: 0; top: 0; aspect-ratio: 640 / 524; transform-origin: 0 0;">
+          <div data-tv-theater-screen style="position: absolute; left: 9%; top: 13%; width: 72%; height: 70%; overflow: hidden; background: #05060F; z-index: 1;">
+            <iframe data-tv-theater-frame src="" title={latestVideo.title} tabindex="-1" style="position: absolute; left: -20.75%; top: 0; width: 141.5%; height: 100%; border: 0; display: block; background: #000; pointer-events: none;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+            <canvas data-tv-theater-static width="160" height="128" style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none;"></canvas>
+            <div data-tv-theater-vignette style="position: absolute; inset: 0; background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.55) 100%); pointer-events: none;"></div>
+          </div>
+          <img data-tv-theater-img src="/uploads/old-tv.webp" data-src="/uploads/old-tv-large.webp" alt="" loading="lazy" width="640" height="524" style="position: relative; z-index: 2; display: block; width: 100%; height: auto; pointer-events: none;" />
+        </div>
+        <button type="button" data-tv-theater-close aria-label="Sluiten" style="position: absolute; right: 20px; top: 20px; z-index: 3; width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.35); background: rgba(11,15,35,0.7); color: #FFFFFF; font-size: 18px; display: grid; place-items: center; cursor: pointer;">
+          <i class="ph ph-x"></i>
+        </button>
+      </div>
+    )}
 
     <div data-video-modal style="display: none; position: fixed; inset: 0; z-index: 300; background: rgba(11,15,35,0.88); align-items: center; justify-content: center; padding: 5vw;">
       <div style="position: relative; width: min(1100px, 92vw);">

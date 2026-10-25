@@ -1,0 +1,75 @@
+# Checks on every push and pull request, plus a weekly run so new vulnerabilities
+# in existing dependencies are noticed too.
+#
+#   build          the site still builds
+#   audit          known vulnerabilities in dependencies (reported, does not fail the run)
+#   codeql         static analysis of the code (SAST); findings appear under Security > Code scanning
+#   secrets        leaked keys or tokens anywhere in the git history
+#
+# Deploying is separate: Vercel builds and hosts the site.
+
+name: Checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: '0 6 * * 1'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      # public values: the dataset is readable without a token
+      PUBLIC_SANITY_PROJECT_ID: co5dp6gp
+      PUBLIC_SANITY_DATASET: production
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npm run build
+      - run: test -f dist/index.html && test -f dist/robots.txt && test -f dist/llms.txt && test -f dist/sitemap-index.xml
+
+  audit:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm audit --omit=dev --audit-level=high
+
+  codeql:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: github/codeql-action/init@v3
+        with:
+          languages: javascript-typescript
+          queries: security-extended
+      - uses: github/codeql-action/analyze@v3
+
+  secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
