@@ -16,7 +16,7 @@ const { partners } = pageContent;
   <Fragment slot="head">
     <style>
       .partner-link { transition: background 0.2s ease; }
-      .partner-link:hover { background: #FFFFFF; color: #14245C; }
+      .partner-link:hover { background: rgba(255,255,255,0.16) !important; }
     </style>
   </Fragment>
 
@@ -41,7 +41,7 @@ const { partners } = pageContent;
               <div style="font-family: 'Inter Tight', sans-serif; font-weight: 600; font-size: 18px; color: #FFFFFF; margin-bottom: 6px;">{p.name}</div>
               <div style="font-size: 14px; line-height: 1.55; color: #DCEAFF; margin-bottom: 18px;">{p.desc}</div>
               {p.url && (
-                <a href={p.url} target="_blank" rel="noopener" class="partner-link" aria-label={`Bezoek de website van ${p.name}`} style="align-self: flex-start; margin-top: auto; display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 999px; background: #BFF7F7; color: #14245C; font-size: 14px; font-weight: 600; text-decoration: none;">
+                <a href={p.url} target="_blank" rel="noopener" class="partner-link" aria-label={`Bezoek de website van ${p.name}`} style="align-self: stretch; margin-top: auto; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 22px; border-radius: 999px; background: rgba(255,255,255,0.08); color: #BFF7F7; font-family: 'Inter Tight', sans-serif; font-size: 15px; font-weight: 600; text-decoration: none;">
                   Bezoek website <i class="ph ph-arrow-up-right"></i>
                 </a>
               )}
