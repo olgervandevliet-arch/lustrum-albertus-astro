@@ -50,7 +50,7 @@ const mobileItems = [
   {showAnnouncement && (
     <div data-bar style="position: relative; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 6px 8px; background: #3B4C99; color: #FFFFFF; font-size: clamp(12px, 3vw, 14px); font-weight: 500; letter-spacing: 0.005em; padding: 12px clamp(40px, 10vw, 56px); text-align: center; border-bottom: 1px solid #677BC0">
       <span>{site.announcementText}</span>
-      <a href={site.instagramUrl} target="_blank" rel="noopener" style="color: #FFFFFF; text-decoration: underline; text-underline-offset: 3px; font-weight: 500;">{site.announcementLinkText}</a>
+      <a href={site.announcementUrl || site.instagramUrl} target="_blank" rel="noopener" style="color: #FFFFFF; text-decoration: underline; text-underline-offset: 3px; font-weight: 500;">{site.announcementLinkText}</a>
       <button type="button" data-bar-close class="header-bar-close" aria-label="Sluiten" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); width: 26px; height: 26px; display: grid; place-items: center; background: transparent; border: 0; cursor: pointer; color: #DCEAFF; font-size: 18px; line-height: 1; padding: 0;">
         <i class="ph ph-x"></i>
       </button>
