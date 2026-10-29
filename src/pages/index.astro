@@ -10,6 +10,7 @@ import '@fontsource/vt323/latin-400.css';
 const homeContent = await getHomePage();
 
 const TARGET_DATE = homeContent.countdownTargetDate;
+const showCountdown = homeContent.showCountdown !== false;
 const diff = Math.max(0, Date.parse(TARGET_DATE) - Date.now());
 const total = Math.floor(diff / 1000);
 const pad = (n: number, len: number) => String(n).padStart(len, '0');
@@ -63,6 +64,7 @@ const letters = [
   <Fragment slot="head">
     <script src="/vendor/gsap/home-vendor.min.js" is:inline defer></script>
     <style>
+      [data-no-countdown] { background: none !important; border-color: transparent !important; box-shadow: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; width: min(420px, 60vw) !important; padding: 0 !important; }
       @media (max-width: 980px) {
         [data-flap-tile] { width: clamp(40px, 12.5vw, 90px) !important; height: clamp(64px, 20vw, 145px) !important; font-size: clamp(34px, 11vw, 90px) !important; }
         [data-counter] { width: 96vw !important; }
@@ -132,7 +134,7 @@ const letters = [
 
         <div data-counter style="position: absolute; left: 50%; bottom: 14vh; transform: translate(-50%, 0); opacity: 1; width: min(1160px, 90vw); will-change: transform;">
           <h1 style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;">Tel samen af voor het 26e lustrum van Albertus Magnus</h1>
-          <div data-counter-glass style="position: relative; width: fit-content; margin: 0 auto; border-radius: 28px; background: linear-gradient(rgba(0,0,0,0.04), rgba(0,0,0,0.04)), rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.18); backdrop-filter: blur(18px) saturate(140%); -webkit-backdrop-filter: blur(18px) saturate(140%); box-shadow: inset 0 1px 0 rgba(255,255,255,0.14); padding: clamp(20px, 2.7vw, 36px);">
+          <div data-counter-glass data-no-countdown={!showCountdown || undefined} style="position: relative; width: fit-content; margin: 0 auto; border-radius: 28px; background: linear-gradient(rgba(0,0,0,0.04), rgba(0,0,0,0.04)), rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.18); backdrop-filter: blur(18px) saturate(140%); -webkit-backdrop-filter: blur(18px) saturate(140%); box-shadow: inset 0 1px 0 rgba(255,255,255,0.14); padding: clamp(20px, 2.7vw, 36px);">
             <div data-tv-wrap style="position: absolute; right: 6%; bottom: 100%; width: min(300px, 26vw); z-index: 5; pointer-events: none;">
               <div style="position: relative; width: 100%;">
                 <div
@@ -192,6 +194,7 @@ const letters = [
                 <img src="/uploads/old-tv.webp" srcset="/uploads/old-tv-448.webp 448w, /uploads/old-tv.webp 640w" sizes="(max-width: 980px) min(320px, 62vw), min(300px, 26vw)" alt="" width="640" height="524" fetchpriority="high" decoding="async" style="display: block; width: 100%; height: auto; position: relative; z-index: 2;" />
               </div>
             </div>
+            {showCountdown && (
             <div data-countdown-grid style="display: flex; align-items: flex-start; justify-content: center; flex-wrap: wrap; row-gap: 14px; gap: clamp(4px, 1vw, 14px); position: relative">
               <div data-cd-group="days" style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
                 <div style="display: flex; justify-content: center; gap: clamp(5px, 0.7vw, 10px);">
@@ -226,6 +229,7 @@ const letters = [
                 <div style="font-size: clamp(12px, 1.05vw, 16px); font-weight: 500; color: #2C3C86;">Seconden</div>
               </div>
             </div>
+            )}
           </div>
         </div>
       </div>

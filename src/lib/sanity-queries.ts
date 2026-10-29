@@ -3,6 +3,7 @@ import { defineQuery } from 'groq';
 
 const SITE_SETTINGS_QUERY = defineQuery(`*[_id == "siteSettings"][0]`);
 const HOME_PAGE_QUERY = defineQuery(`*[_id == "homePage"][0]{
+  showCountdown,
   countdownTargetDate,
   videos[]{ available, comingSoon, title, embed, thumbnail }
 }`);
