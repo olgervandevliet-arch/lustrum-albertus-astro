@@ -9,7 +9,7 @@ const { colors } = pageContent;
 
 <BaseLayout
   title="Kleuren — Lustrum Albertus Magnus XXVI"
-  description="De officiële kleuren van Lustrum Albertus Magnus XXVI: Paars (Violet Velvet, PB2848-5019) en Aquamarijn (Serene Green, G1798-2441), met HEX, RGB, CMYK, Pantone en RAL-codes."
+  description="De officiële kleuren van Lustrum Albertus Magnus XXVI: Paars (Violet Velvet, PB2848-5019) en Aquamarijn (Serene Green, G1798-2441)."
   path="/kleuren"
 >
   <Fragment slot="head">
@@ -38,10 +38,6 @@ const { colors } = pageContent;
             <div><span style="font-weight: 700;">Verfnaam</span> {c.paintName}</div>
             <div><span style="font-weight: 700;">Kleurcode</span> {c.paintCode}</div>
             <div><span style="font-weight: 700;">HEX</span> {c.hex}</div>
-            <div><span style="font-weight: 700;">RGB</span> {c.rgb}</div>
-            <div><span style="font-weight: 700;">CMYK</span> {c.cmyk}</div>
-            <div><span style="font-weight: 700;">Pantone</span> {c.pantone}</div>
-            <div><span style="font-weight: 700;">RAL</span> {c.ral}</div>
           </div>
         </div>
       ))}
