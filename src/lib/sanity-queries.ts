@@ -17,7 +17,8 @@ const FAQ_PAGE_QUERY = defineQuery(`*[_id == "faqPage"][0]`);
 const CONTACT_PAGE_QUERY = defineQuery(`*[_id == "contactPage"][0]{
   eyebrow, title, description,
   emailContacts[]{ label, contactName, email },
-  board[]{ name, role, email, photo, "photoDims": photo.asset->metadata.dimensions }
+  board[]{ name, role, email, photo, "photoDims": photo.asset->metadata.dimensions },
+  groupPhoto
 }`);
 const KLEUREN_PAGE_QUERY = defineQuery(`*[_id == "kleurenPage"][0]`);
 const THEMA_PAGE_QUERY = defineQuery(`*[_id == "themaPage"][0]`);

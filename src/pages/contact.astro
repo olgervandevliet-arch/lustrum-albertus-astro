@@ -6,7 +6,7 @@ import { getSiteSettings, getContactPage } from '../lib/sanity-queries';
 import { urlFor } from '../utils/sanity';
 const site = await getSiteSettings();
 const pageContent = await getContactPage();
-const { board, emailContacts } = pageContent;
+const { board, emailContacts, groupPhoto } = pageContent;
 
 // Board portraits are framed tight on the face. Without a crop set in the
 // Studio, cut that framing from the full-res original (rather than zooming a
@@ -32,10 +32,12 @@ function boardPhotoSrc(photo: any, dims: { width: number; height: number } | nul
       @media (min-width: 700px) {
         [data-board-grid] { grid-template-columns: repeat(4, 1fr); }
       }
-      [data-email-grid] { grid-template-columns: 1fr; }
-      @media (min-width: 560px) {
-        [data-email-grid] { grid-template-columns: repeat(2, 1fr); }
+      [data-contact-layout] { grid-template-columns: 1fr; }
+      @media (min-width: 900px) {
+        [data-contact-layout] { grid-template-columns: 1.1fr 1fr; }
+        [data-contact-photo] { margin-top: clamp(40px, 4vw, 60px); }
       }
+      [data-contact-toggle]:hover span { color: #BFF7F7; }
     </style>
   </Fragment>
 
@@ -43,32 +45,42 @@ function boardPhotoSrc(photo: any, dims: { width: number; height: number } | nul
     <Header />
     <main>
 
-    <section style="max-width: 1240px; margin: 0 auto; padding: clamp(150px, 16vw, 200px) 6vw clamp(50px, 6vw, 80px);">
-      <div style="font-family: 'Inter Tight', sans-serif; font-weight: 600; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: #BDEEF2; margin-bottom: 14px;">{pageContent.eyebrow}</div>
-      <h1 style="margin: 0 0 18px; font-family: 'Inter Tight', sans-serif; font-weight: 700; font-size: clamp(38px, 6vw, 84px); line-height: 1.02; letter-spacing: -0.02em; color: #BFF7F7;">{pageContent.title}</h1>
-      <p style="margin: 0; max-width: 620px; font-size: clamp(16px, 1.6vw, 19px); line-height: 1.6; color: #DCEAFF;">{pageContent.description}</p>
-    </section>
-
-    <section style="max-width: 1240px; margin: 0 auto; padding: 0 6vw clamp(50px, 6vw, 80px);">
-      <div data-email-grid style="display: grid; gap: 18px;">
-        {emailContacts.map((c) => (
-          <a href={`mailto:${c.email}`} style="display: flex; align-items: center; gap: 16px; padding: 22px; border-radius: 16px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); text-decoration: none;">
-            <i class="ph ph-envelope-simple" style="font-size: 26px; color: #BFF7F7; flex: 0 0 auto;"></i>
-            <div style="min-width: 0;">
-              <div style="font-family: 'Inter Tight', sans-serif; font-weight: 600; color: #FFFFFF; margin-bottom: 2px;">{c.label}</div>
-              <div style="font-size: 13px; color: #BDEEF2; margin-bottom: 2px;">{c.contactName}</div>
-              <div style="font-size: 14px; color: #DCEAFF; word-break: break-all;">{c.email}</div>
+    <section data-contact-layout style="max-width: 1240px; margin: 0 auto; padding: clamp(150px, 16vw, 200px) 6vw clamp(50px, 6vw, 80px); display: grid; gap: clamp(32px, 4vw, 56px); align-items: start;">
+      <div>
+        <div style="font-family: 'Inter Tight', sans-serif; font-weight: 600; font-size: 14px; letter-spacing: 0.08em; text-transform: uppercase; color: #BDEEF2; margin-bottom: 14px;">{pageContent.eyebrow}</div>
+        <h1 style="margin: 0 0 18px; font-family: 'Inter Tight', sans-serif; font-weight: 700; font-size: clamp(38px, 5.4vw, 76px); line-height: 1.02; letter-spacing: -0.02em; color: #BFF7F7;">{pageContent.title}</h1>
+        <p style="margin: 0 0 32px; max-width: 560px; font-size: clamp(16px, 1.6vw, 19px); line-height: 1.6; color: #DCEAFF;">{pageContent.description}</p>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          {emailContacts.map((c) => (
+            <div data-contact-item style="border-radius: 14px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); overflow: hidden;">
+              <button type="button" data-contact-toggle aria-expanded="false" style="width: 100%; display: flex; align-items: center; gap: 14px; padding: 18px 20px; background: transparent; border: 0; cursor: pointer; text-align: left; color: #FFFFFF; font-family: 'Inter Tight', sans-serif; font-weight: 600; font-size: clamp(15px, 1.4vw, 17px);">
+                <i class="ph ph-envelope-simple" style="flex: 0 0 auto; font-size: 22px; color: #BFF7F7;"></i>
+                <span style="flex: 1;">{c.label}</span>
+                <i data-contact-icon class="ph ph-plus" style="flex: 0 0 auto; font-size: 18px; color: #BFF7F7; transition: transform 0.25s ease;"></i>
+              </button>
+              <div data-contact-panel hidden style="padding: 0 20px 18px 56px; font-size: 15px; line-height: 1.6;">
+                <div style="color: #BDEEF2;">{c.contactName}</div>
+                <a href={`mailto:${c.email}`} style="color: #FFFFFF; text-decoration: underline; text-underline-offset: 3px; word-break: break-all;">{c.email}</a>
+              </div>
             </div>
-          </a>
-        ))}
-        <a href={site.instagramUrl} target="_blank" rel="noopener" style="display: flex; align-items: center; gap: 16px; padding: 22px; border-radius: 16px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); text-decoration: none;">
-          <i class="ph ph-instagram-logo" style="font-size: 26px; color: #BFF7F7; flex: 0 0 auto;"></i>
-          <div>
-            <div style="font-family: 'Inter Tight', sans-serif; font-weight: 600; color: #FFFFFF; margin-bottom: 2px;">Instagram</div>
-            <div style="font-size: 15px; color: #DCEAFF;">{site.instagramHandle}</div>
+          ))}
+          <div data-contact-item style="border-radius: 14px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14); overflow: hidden;">
+            <button type="button" data-contact-toggle aria-expanded="false" style="width: 100%; display: flex; align-items: center; gap: 14px; padding: 18px 20px; background: transparent; border: 0; cursor: pointer; text-align: left; color: #FFFFFF; font-family: 'Inter Tight', sans-serif; font-weight: 600; font-size: clamp(15px, 1.4vw, 17px);">
+              <i class="ph ph-instagram-logo" style="flex: 0 0 auto; font-size: 22px; color: #BFF7F7;"></i>
+              <span style="flex: 1;">Instagram</span>
+              <i data-contact-icon class="ph ph-plus" style="flex: 0 0 auto; font-size: 18px; color: #BFF7F7; transition: transform 0.25s ease;"></i>
+            </button>
+            <div data-contact-panel hidden style="padding: 0 20px 18px 56px; font-size: 15px; line-height: 1.6;">
+              <a href={site.instagramUrl} target="_blank" rel="noopener" style="color: #FFFFFF; text-decoration: underline; text-underline-offset: 3px;">{site.instagramHandle}</a>
+            </div>
           </div>
-        </a>
+        </div>
       </div>
+      {groupPhoto?.asset && (
+        <div data-contact-photo style="border-radius: 16px; overflow: hidden; aspect-ratio: 1 / 1; background: rgba(103,123,192,0.16);">
+          <img src={urlFor(groupPhoto).width(900).height(900).fit('crop').auto('format').quality(80).url()} srcset={[480, 720, 900, 1200].map((w) => `${urlFor(groupPhoto).width(w).height(w).fit('crop').auto('format').quality(80).url()} ${w}w`).join(', ')} sizes="(max-width: 899px) 88vw, 560px" width="900" height="900" alt="Het lustrumcomité van Lustrum Albertus Magnus XXVI" fetchpriority="high" decoding="async" style="display: block; width: 100%; height: 100%; object-fit: cover;" />
+        </div>
+      )}
     </section>
 
     <section style="max-width: 1240px; margin: 0 auto; padding: clamp(40px, 5vw, 70px) 6vw;">
@@ -112,3 +124,17 @@ function boardPhotoSrc(photo: any, dims: { width: number; height: number } | nul
   </div>
 
 </BaseLayout>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-contact-item]').forEach((item) => {
+    const toggle = item.querySelector<HTMLButtonElement>('[data-contact-toggle]');
+    const panel = item.querySelector<HTMLElement>('[data-contact-panel]');
+    const icon = item.querySelector<HTMLElement>('[data-contact-icon]');
+    toggle?.addEventListener('click', () => {
+      const open = toggle.getAttribute('aria-expanded') !== 'true';
+      toggle.setAttribute('aria-expanded', String(open));
+      if (panel) panel.hidden = !open;
+      if (icon) icon.style.transform = open ? 'rotate(45deg)' : 'rotate(0deg)';
+    });
+  });
+</script>
